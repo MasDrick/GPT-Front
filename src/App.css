@@ -13,11 +13,94 @@
   padding: 20px;
 }
 
+.social {
+  display: flex;
+  justify-content: end;
+}
+
+/* Основные стили для кнопки */
+.telegram-button {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  margin-left: 10px;
+  border-radius: 12%;
+  padding: 7px;
+  background: #27a6e5;
+
+  transition: all 0.2s ease;
+}
+
+/* Анимация пульсации иконки */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.loading-dots {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 8px;
+  padding-bottom: 10px;
+}
+
+/* Стили для каждой точки */
+.loading-dots span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #ffffff; /* Белый цвет точек */
+  border-radius: 50%; /* Делаем точки круглыми */
+  margin-right: 4px; /* Отступ между точками */
+  animation: bounce 5s infinite ease-in-out; /* Увеличили длительность анимации до 5 секунд */
+}
+
+/* Задержка для создания каскадного эффекта */
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+/* Анимация подъема и опускания */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0); /* Начальная и конечная позиция */
+  }
+  10% {
+    transform: translateY(-7px); /* Подъём на 7px */
+  }
+  20% {
+    transform: translateY(0); /* Возвращение в исходную позицию */
+  }
+  20%,
+  100% {
+    transform: translateY(0); /* Пауза в исходной позиции */
+  }
+}
+
+/* Эффект при наведении на кнопку */
+.telegram-button:hover {
+  transform: translateY(-2px);
+  background: #28b7ff;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  height: 7em;
+  padding: 1.3em;
   will-change: filter;
   transition: filter 300ms;
+  /* animation: logo-spin infinite; */
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
@@ -26,6 +109,15 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+/* Стили для логотипа */
+.logo {
+  height: 7em;
+  padding: 1.3em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+/* Анимация вращения логотипа */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -33,6 +125,16 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Применение анимации к логотипу React */
+.logo.react {
+  animation: logo-spin infinite 10s linear; /* Вращение за 10 секунд */
+}
+
+/* Изменение фильтра при наведении */
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa); /* Цвет тени при наведении */
 }
 
 @media (prefers-reduced-motion: no-preference) {
