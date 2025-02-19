@@ -39,12 +39,11 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  border: 1px solid #6e6e6e;
-  background-color: var(--tg-theme-secondary-bg-color);
+
+  background-color: #bfbfbf;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 .activeBtn {
   background-color: var(--tg-theme-button-color);
-  border: 1px solid var(--tg-theme-button-color);
 }
