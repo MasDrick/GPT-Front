@@ -32,10 +32,6 @@
   justify-content: space-between;
 }
 
-.lightThemeBtn {
-  background-color: #000000 !important; /* Черный цвет для кнопок в светлой теме */
-}
-
 .btn {
   display: flex;
   width: 32px;
@@ -44,11 +40,13 @@
   align-items: center;
   border-radius: 50%;
 
-  background-color: var(--tg-theme-secondary-bg-color);
+  background-color: var(--tg-theme-bg-color);
+  border: 1px solid var(--tg-theme-secondary-bg-color);
 
   cursor: pointer;
   transition: all 0.3s ease;
 }
 .activeBtn {
   background-color: var(--tg-theme-button-color);
+  border: 1px solid var(--tg-theme-button-color);
 }
