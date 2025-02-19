@@ -1,0 +1,32 @@
+.btn {
+  width: 200px;
+  padding: 10px 20px;
+  background-color: var(--tg-theme-button-color);
+  color: var(--tg-theme-button-text-color);
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Стиль при наведении */
+.btn:hover {
+  background-color: var(--tg-theme-secondary-bg-color); /* Изменение цвета при наведении */
+  transform: scale(1.05); /* Легкое увеличение кнопки */
+}
+
+/* Стиль при нажатии */
+.btn:active {
+  background-color: var(--tg-theme-link-color); /* Изменение цвета при нажатии */
+  transform: scale(0.95); /* Легкое уменьшение кнопки */
+}
+
+/* Стиль для отключенной кнопки */
+.btn:disabled {
+  background-color: var(--tg-theme-secondary-bg-color);
+  color: var(--tg-theme-hint-color);
+  cursor: not-allowed;
+  opacity: 0.7;
+}

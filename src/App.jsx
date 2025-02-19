@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 
 import { Route, Routes } from 'react-router';
+
+import Home from './pages/Home/Home';
 import Development from './pages/Develop/Development';
+
 import './App.css';
 
+const tg = window.Telegram.WebApp;
+
 function App() {
-  const [count, setCount] = useState(0);
+  useEffect(() => {
+    tg.ready();
+  }, []);
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<h1>Это главная</h1>} />
+        <Route path="/" element={<Home />} />
         <Route path="/develop" element={<Development />} />
       </Routes>
     </>
