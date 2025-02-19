@@ -6,7 +6,7 @@ const Header = () => {
   return (
     <div className={s.header}>
       <button>Burger</button>
-      <h3>InsuGPT</h3>
+
       <button>clear</button>
     </div>
   );
