@@ -1,7 +1,7 @@
 .custom_textarea {
   width: 100%;
   padding: 8px;
-  border: 1px solid var(--tg-theme-hint-color);
+  border: 1px solid var(--tg-theme-secondary-bg-color);
   border-radius: 4px;
   position: relative;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -38,7 +38,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  background-color: var(--tg-theme-hint-color);
+  background-color: var(--tg-theme-secondary-bg-color);
   cursor: pointer;
   transition: all 0.3s ease;
 }

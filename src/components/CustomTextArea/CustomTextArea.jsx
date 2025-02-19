@@ -79,13 +79,13 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
       />
       <div className={styles.buttons}>
         <button className={styles.btn}>
-          <Paperclip color="var(--tg-theme-text-color)" size={18} />
+          <Paperclip color="#fff" size={18} />
         </button>
         <button
           className={message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`}
           onClick={handleSubmit}>
           {/* Кнопка отправки вызывает handleSubmit */}
-          <ArrowUp color="var(--tg-theme-text-color)" size={18} />
+          <ArrowUp color="#fff" size={18} />
         </button>
       </div>
     </div>
