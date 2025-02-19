@@ -5,8 +5,6 @@ import styles from './CustomTextArea.module.scss';
 const CustomTextArea = ({ placeholder, value, onChange }) => {
   const [active, setActive] = useState(false);
   const [message, setMessage] = useState(''); // Новое состояние для управления значением textarea
-  const [isLightTheme, setIsLightTheme] = useState(false); // Состояние для темы
-
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
 
@@ -14,11 +12,18 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
+      // Сбрасываем высоту
       textarea.style.height = 'auto';
+      // Устанавливаем новую высоту, но не больше максимальной
       const lineHeight = 20; // Высота строки
       const maxLines = 9; // Максимальное количество строк
       const maxHeight = lineHeight * maxLines;
-      textarea.style.height = `${Math.min(textarea.scrollHeight, maxHeight)}px`;
+
+      if (textarea.scrollHeight > maxHeight) {
+        textarea.style.height = `${maxHeight}px`;
+      } else {
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
     }
   };
 
@@ -29,28 +34,11 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
         setActive(false); // Снимаем активное состояние, если клик был вне компонента
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
-
-  // Определение темы при монтировании компонента
-  useEffect(() => {
-    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-      // Проверяем наличие isDark
-      const isDark = Telegram.WebApp.isDark ?? false;
-
-      // Fallback для старых версий Telegram Web App
-      if (isDark === undefined) {
-        const themeParams = Telegram.WebApp.themeParams;
-        const isLight =
-          themeParams.bg_color === 'ffffff' || themeParams.secondary_bg_color === 'ffffff';
-        setIsLightTheme(isLight);
-      } else {
-        setIsLightTheme(!isDark); // Если isDark доступен, используем его
-      }
-    }
   }, []);
 
   // Функция для отправки сообщения
@@ -59,15 +47,14 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
       console.log('Отправлено сообщение:', message); // Выводим сообщение в консоль
       setMessage(''); // Очищаем значение textarea
       textareaRef.current.focus();
-      adjustTextareaHeight(); // Сбрасываем высоту после очистки
+      const textarea = textareaRef.current;
+      textarea.style.height = 'auto';
+      // Устанавливаем новую высоту, но не больше максимальной
+      const lineHeight = 20; // Высота строки
+      const maxLines = 9; // Максимальное количество строк
+      const maxHeight = lineHeight * maxLines; // Сбрасываем высоту textarea после очистки
+      // Устанавливаем фокус обратно на textarea
     }
-  };
-
-  // Функция для динамического создания классов
-  const getButtonClassName = (isActive) => {
-    return [styles.btn, isActive ? styles.activeBtn : '', isLightTheme ? styles.lightThemeBtn : '']
-      .filter(Boolean)
-      .join(' ');
   };
 
   return (
@@ -91,10 +78,12 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
         }}
       />
       <div className={styles.buttons}>
-        <button className={getButtonClassName(false)}>
+        <button className={styles.btn}>
           <Paperclip color="#fff" size={18} />
         </button>
-        <button className={getButtonClassName(message.trim() !== '')} onClick={handleSubmit}>
+        <button
+          className={message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`}
+          onClick={handleSubmit}>
           {/* Кнопка отправки вызывает handleSubmit */}
           <ArrowUp color="#fff" size={18} />
         </button>
