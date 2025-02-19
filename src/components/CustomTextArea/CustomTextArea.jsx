@@ -46,8 +46,14 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
     if (message.trim() !== '') {
       console.log('Отправлено сообщение:', message); // Выводим сообщение в консоль
       setMessage(''); // Очищаем значение textarea
-      adjustTextareaHeight(); // Сбрасываем высоту textarea после очистки
-      textareaRef.current.focus(); // Устанавливаем фокус обратно на textarea
+      textareaRef.current.focus();
+      const textarea = textareaRef.current;
+      textarea.style.height = 'auto';
+      // Устанавливаем новую высоту, но не больше максимальной
+      const lineHeight = 20; // Высота строки
+      const maxLines = 9; // Максимальное количество строк
+      const maxHeight = lineHeight * maxLines; // Сбрасываем высоту textarea после очистки
+      // Устанавливаем фокус обратно на textarea
     }
   };
 
