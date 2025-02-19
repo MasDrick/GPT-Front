@@ -38,8 +38,18 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
   // Определение темы при монтировании компонента
   useEffect(() => {
     if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-      const isDark = Telegram.WebApp.isDark; // Используем параметр isDark
-      setIsLightTheme(!isDark); // Если тема темная, устанавливаем false
+      // Проверяем наличие isDark
+      const isDark = Telegram.WebApp.isDark ?? false;
+
+      // Fallback для старых версий Telegram Web App
+      if (isDark === undefined) {
+        const themeParams = Telegram.WebApp.themeParams;
+        const isLight =
+          themeParams.bg_color === 'ffffff' || themeParams.secondary_bg_color === 'ffffff';
+        setIsLightTheme(isLight);
+      } else {
+        setIsLightTheme(!isDark); // Если isDark доступен, используем его
+      }
     }
   }, []);
 
@@ -51,6 +61,13 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
       textareaRef.current.focus();
       adjustTextareaHeight(); // Сбрасываем высоту после очистки
     }
+  };
+
+  // Функция для динамического создания классов
+  const getButtonClassName = (isActive) => {
+    return [styles.btn, isActive ? styles.activeBtn : '', isLightTheme ? styles.lightThemeBtn : '']
+      .filter(Boolean)
+      .join(' ');
   };
 
   return (
@@ -74,16 +91,10 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
         }}
       />
       <div className={styles.buttons}>
-        <button className={`${styles.btn} ${isLightTheme ? styles.lightThemeBtn : ''}`}>
+        <button className={getButtonClassName(false)}>
           <Paperclip color="#fff" size={18} />
         </button>
-        <button
-          className={
-            message === ''
-              ? styles.btn
-              : `${styles.btn} ${styles.activeBtn} ${isLightTheme ? styles.lightThemeBtn : ''}`
-          }
-          onClick={handleSubmit}>
+        <button className={getButtonClassName(message.trim() !== '')} onClick={handleSubmit}>
           {/* Кнопка отправки вызывает handleSubmit */}
           <ArrowUp color="#fff" size={18} />
         </button>
