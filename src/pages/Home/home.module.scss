@@ -14,13 +14,11 @@
 /* Стиль при наведении */
 .btn:hover {
   background-color: var(--tg-theme-secondary-bg-color); /* Изменение цвета при наведении */
-  transform: scale(1.05); /* Легкое увеличение кнопки */
 }
 
 /* Стиль при нажатии */
 .btn:active {
   background-color: var(--tg-theme-link-color); /* Изменение цвета при нажатии */
-  transform: scale(0.95); /* Легкое уменьшение кнопки */
 }
 
 /* Стиль для отключенной кнопки */
