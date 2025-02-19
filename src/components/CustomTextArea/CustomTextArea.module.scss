@@ -1,14 +1,14 @@
 .custom_textarea {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(var(--tg-theme-bg-color) 0.5);
   border-radius: 4px;
   position: relative;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .active {
-  border: 1px solid #40a9ff; /* Цвет границы при фокусе */
-  box-shadow: 0 0 4px rgba(64, 169, 255, 0.5); /* Тень при фокусе */
+  border: 1px solid var(--tg-theme-button-color);
+  box-shadow: 0 0 4px rgba(var(--tg-theme-button-color) 0.5);
 }
 
 .textarea {
@@ -26,11 +26,6 @@
   }
 }
 
-.custom_textarea:active {
-  border-color: var(--tg-theme-button-color); /* Цвет границы при фокусе */
-  box-shadow: 0 0 4px rgba(64, 169, 255, 0.5); /* Тень при фокусе */
-}
-
 .buttons {
   display: flex;
   justify-content: space-between;
@@ -43,7 +38,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  background-color: #3d3d3d;
+  background-color: rgba(var(--tg-theme-bg-color) 0.5);
   cursor: pointer;
   transition: all 0.3s ease;
 }

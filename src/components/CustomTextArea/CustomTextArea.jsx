@@ -67,7 +67,7 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
       }}>
       <textarea
         ref={textareaRef}
-        placeholder={placeholder || 'Написать InsuGPT'}
+        placeholder={placeholder || 'Спросить у InsuGPT'}
         className={styles.textarea}
         value={message} // Используем локальное состояние для управления значением
         onFocus={() => setActive(true)} // Активируем состояние при фокусе на textarea
@@ -79,13 +79,13 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
       />
       <div className={styles.buttons}>
         <button className={styles.btn}>
-          <Paperclip size={18} />
+          <Paperclip color="var(--tg-theme-text-color)" size={18} />
         </button>
         <button
           className={message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`}
           onClick={handleSubmit}>
           {/* Кнопка отправки вызывает handleSubmit */}
-          <ArrowUp size={18} />
+          <ArrowUp color="var(--tg-theme-text-color)" size={18} />
         </button>
       </div>
     </div>
