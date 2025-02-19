@@ -8,7 +8,7 @@
 }
 .active {
   border: 1px solid var(--tg-theme-button-color);
-  box-shadow: 0 0 4px color(var(--tg-theme-button-color) lighter(30%));
+  box-shadow: 0 0 4px var(--tg-theme-button-color);
 }
 
 .textarea {
