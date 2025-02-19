@@ -16,7 +16,7 @@ const Home = () => {
     <div className={s.container}>
       <Header />
       <h1>
-        Привет, <span className={s.user}>{user?.username}!</span> <br /> Чем я могу помочь?
+        Привет, <span className={s.user}>{user?.username}</span> <br /> Чем я могу помочь?
       </h1>
 
       <CustomTextArea />

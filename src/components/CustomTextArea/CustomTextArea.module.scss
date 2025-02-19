@@ -1,14 +1,15 @@
 .custom_textarea {
   width: 100%;
   padding: 8px;
-  border: 1px solid var(--tg-theme-subtitle-text-color);
+  border: 1px solid var(--tg-theme-bg-color);
+  background: var(--tg-theme-bg-color);
   border-radius: 4px;
   position: relative;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .active {
-  border: 1px solid var(--tg-theme-button-color);
-  box-shadow: 0 0 4px var(--tg-theme-button-color);
+  border: 1px solid var(--tg-theme-bg-color);
+  box-shadow: 0 0 4px var(--tg-theme-subtitle-text-color);
 }
 
 .textarea {
