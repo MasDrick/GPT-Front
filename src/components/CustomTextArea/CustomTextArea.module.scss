@@ -1,14 +1,14 @@
 .custom_textarea {
   width: 100%;
   padding: 8px;
-  border: 1px solid rgba(var(--tg-theme-bg-color) 0.5);
+  border: 1px solid var(--tg-theme-hint-color);
   border-radius: 4px;
   position: relative;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .active {
   border: 1px solid var(--tg-theme-button-color);
-  box-shadow: 0 0 4px rgba(var(--tg-theme-button-color) 0.5);
+  box-shadow: 0 0 4px color(var(--tg-theme-button-color) lighter(30%));
 }
 
 .textarea {
@@ -38,7 +38,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  background-color: rgba(var(--tg-theme-bg-color) 0.5);
+  background-color: var(--tg-theme-hint-color);
   cursor: pointer;
   transition: all 0.3s ease;
 }
