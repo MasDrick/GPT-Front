@@ -14,7 +14,7 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Это главная</h1>
+      <h1>Здарова, {tg.initDataUnsafe?.user?.username}</h1>
       <button onClick={handleClick} className={s.btn}>
         Нажми меня
       </button>
