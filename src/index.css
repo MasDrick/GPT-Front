@@ -15,11 +15,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  background: var(--tg-theme-bg-color);
-  color: var(--tg-theme-text-color);
-}
-
 /* Reset and base styles  */
 * {
   padding: 0px;

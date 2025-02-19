@@ -1,3 +1,20 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 20px;
+  height: 100vh;
+  background: var(--tg-theme-bg-color);
+  color: var(--tg-theme-text-color);
+
+  h1 {
+    text-align: center;
+  }
+}
+
 .btn {
   width: 200px;
   padding: 10px 20px;

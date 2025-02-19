@@ -1,0 +1,52 @@
+.custom_textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  position: relative;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.active {
+  border: 1px solid #40a9ff; /* Цвет границы при фокусе */
+  box-shadow: 0 0 4px rgba(64, 169, 255, 0.5); /* Тень при фокусе */
+}
+
+.textarea {
+  width: 100%; /* Ширина textarea */
+  min-height: 20px; /* Минимальная высота для одной строки */
+  max-height: 180px; /* Максимальная высота для 9 строк (20px * 9) */
+  resize: none;
+  font-size: 14px;
+  box-sizing: border-box;
+  overflow-y: auto; /* Появление скролла при превышении максимальной высоты */
+  line-height: 20px; /* Высота строки для точного расчета */
+  outline: none;
+  &::placeholder {
+    color: #bfbfbf; /* Цвет плейсхолдера */
+  }
+}
+
+.custom_textarea:active {
+  border-color: var(--tg-theme-button-color); /* Цвет границы при фокусе */
+  box-shadow: 0 0 4px rgba(64, 169, 255, 0.5); /* Тень при фокусе */
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #3d3d3d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.activeBtn {
+  background-color: var(--tg-theme-button-color);
+}
