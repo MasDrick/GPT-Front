@@ -38,10 +38,8 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
   // Определение темы при монтировании компонента
   useEffect(() => {
     if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-      const themeParams = Telegram.WebApp.themeParams;
-      const isLight =
-        themeParams.bg_color === 'ffffff' || themeParams.secondary_bg_color === 'ffffff';
-      setIsLightTheme(isLight); // Устанавливаем состояние темы
+      const isDark = Telegram.WebApp.isDark; // Используем параметр isDark
+      setIsLightTheme(!isDark); // Если тема темная, устанавливаем false
     }
   }, []);
 
