@@ -5,8 +5,7 @@ import styles from './CustomTextArea.module.scss';
 
 const CustomTextArea = ({ placeholder }) => {
   const [active, setActive] = useState(false);
-  const [message, setMessage] = useState(''); // Состояние для управления значением textarea
-  const [botResponse, setBotResponse] = useState(''); // Состояние для хранения ответа от бота
+  const [message, setMessage] = useState(''); // Новое состояние для управления значением textarea
   const { tg } = useTelegram();
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
@@ -46,39 +45,19 @@ const CustomTextArea = ({ placeholder }) => {
       console.log('Отправлено сообщение:', message); // Выводим сообщение в консоль
 
       // Отправляем данные в бота
-      tg.sendData(JSON.stringify({ text: message }));
+      tg.sendData(message);
 
       // Очищаем значение textarea
       setMessage('');
+      textareaRef.current.focus();
 
       // Сбрасываем высоту textarea после очистки
       const textarea = textareaRef.current;
       if (textarea) {
         textarea.style.height = 'auto';
       }
-
-      // Закрываем Mini App и ждем ответа от бота
-      tg.close();
     }
   };
-
-  // Получение ответа от бота при закрытии Mini App
-  useEffect(() => {
-    const handleWebAppClosed = () => {
-      const data = JSON.parse(tg?.WebApp?.data || '{}'); // Получаем данные от бота
-      const response = data.response || '';
-      setBotResponse(response); // Устанавливаем ответ бота в состояние
-    };
-
-    // Проверяем, закрыто ли Mini App
-    if (tg.WebApp?.ready) {
-      tg.WebApp.onEvent('close', handleWebAppClosed);
-    }
-
-    return () => {
-      tg.WebApp.offEvent('close', handleWebAppClosed);
-    };
-  }, [tg]);
 
   return (
     <div
@@ -88,13 +67,6 @@ const CustomTextArea = ({ placeholder }) => {
         e.stopPropagation(); // Предотвращаем распространение события наверх
         setActive(true); // Активируем состояние при клике на контейнер
       }}>
-      {/* Отображение ответа от бота */}
-      {botResponse && (
-        <div className={styles.bot_response}>
-          <strong>Ответ бота:</strong> {botResponse}
-        </div>
-      )}
-
       <textarea
         ref={textareaRef}
         placeholder={placeholder || 'Спросить у InsuGPT'}
