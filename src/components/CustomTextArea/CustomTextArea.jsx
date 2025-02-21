@@ -8,7 +8,6 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
   const [isDarkTheme, setIsDarkTheme] = useState(
     Telegram.WebApp.themeParams?.dark_theme === 'true',
   ); // Состояние для темной темы
-
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
 
@@ -46,13 +45,10 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
     const handleThemeChange = () => {
       setIsDarkTheme(Telegram.WebApp.themeParams?.dark_theme === 'true');
     };
-
     // Подписываемся на событие изменения темы
     Telegram.WebApp.onEvent('themeChanged', handleThemeChange);
-
     // Инициализация темы при монтировании компонента
     handleThemeChange();
-
     return () => {
       // Отписываемся от события при размонтировании компонента
       Telegram.WebApp.offEvent('themeChanged', handleThemeChange);
@@ -70,6 +66,24 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
       const lineHeight = 20; // Высота строки
       const maxLines = 9; // Максимальное количество строк
       const maxHeight = lineHeight * maxLines; // Сбрасываем высоту textarea после очистки
+      console.log('tgWebAppThemeParams:', Telegram.WebApp.themeParams);
+    }
+  };
+
+  // Функция для открытия попапа выбора файла
+  const handleFilePopup = () => {
+    // Проверяем, доступен ли метод openPopup
+    if (Telegram.WebApp.openPopup) {
+      Telegram.WebApp.openPopup(
+        'Выбор файла', // Заголовок попапа
+        '<p>Здесь может быть форма для загрузки файла</p>', // HTML-содержимое попапа
+        {
+          width: 300, // Ширина попапа
+          height: 400, // Высота попапа
+        },
+      );
+    } else {
+      console.error('Метод openPopup недоступен.');
     }
   };
 
@@ -94,16 +108,19 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
         }}
       />
       <div className={styles.buttons}>
-        <button className={isDarkTheme ? `${styles.btn}` : `${styles.btn} ${styles.isLight}`}>
+        {/* Кнопка для выбора файла */}
+        <button
+          className={isDarkTheme ? styles.btn : `${styles.btn} ${styles.isLight}`}
+          onClick={handleFilePopup}>
           <Paperclip
             color={isDarkTheme ? '#ffffff' : '#000000'} // Изменяем цвет иконки в зависимости от темы
             size={18}
           />
         </button>
+        {/* Кнопка отправки */}
         <button
           className={message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`}
           onClick={handleSubmit}>
-          {/* Кнопка отправки вызывает handleSubmit */}
           <ArrowUp
             color={isDarkTheme ? '#ffffff' : '#000000'} // Изменяем цвет иконки в зависимости от темы
             size={18}
