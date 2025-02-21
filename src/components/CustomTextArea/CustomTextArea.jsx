@@ -1,10 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useTelegram } from '../../hooks/useTelegram';
 import { Paperclip, ArrowUp } from 'lucide-react';
 import styles from './CustomTextArea.module.scss';
 
 const CustomTextArea = ({ placeholder, value, onChange }) => {
   const [active, setActive] = useState(false);
   const [message, setMessage] = useState(''); // Новое состояние для управления значением textarea
+
+  const { tg } = useTelegram();
 
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
@@ -51,7 +54,7 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
       const lineHeight = 20; // Высота строки
       const maxLines = 9; // Максимальное количество строк
       const maxHeight = lineHeight * maxLines; // Сбрасываем высоту textarea после очистки
-      console.log(window.Telegram.WebApp.themeParams.bg_color);
+      console.log(tg.themeParams.bg_color);
     }
   };
 
@@ -75,20 +78,20 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
           adjustTextareaHeight(); // Вызываем функцию при изменении текста
         }}
       />
-      <div
-        className={
-          window.Telegram.WebApp.themeParams.bg_color === '#ffffff'
-            ? `${styles.buttons} ${styles.isLight}`
-            : styles.buttons
-        }>
-        <button className={styles.btn}>
+      <div className={styles.buttons}>
+        <button
+          className={
+            tg.themeParams.bg_color === '#ffffff' ? `${styles.btn} ${styles.isLight}` : styles.btn
+          }>
           <Paperclip
             color={'#ffffff'} // Изменяем цвет иконки в зависимости от темы
             size={18}
           />
         </button>
         <button
-          className={message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`}
+          className={`${message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`} ${
+            tg.themeParams?.bg_color === '#ffffff' ? styles.isLight : ''
+          }`}
           onClick={handleSubmit}>
           {/* Кнопка отправки вызывает handleSubmit */}
           <ArrowUp
