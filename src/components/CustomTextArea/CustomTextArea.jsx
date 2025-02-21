@@ -51,7 +51,7 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
       const lineHeight = 20; // Высота строки
       const maxLines = 9; // Максимальное количество строк
       const maxHeight = lineHeight * maxLines; // Сбрасываем высоту textarea после очистки
-      console.log(tgWebAppThemeParams);
+      console.log(window.Telegram.WebApp.themeParams.bg_color);
     }
   };
 
@@ -75,7 +75,12 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
           adjustTextareaHeight(); // Вызываем функцию при изменении текста
         }}
       />
-      <div className={styles.buttons}>
+      <div
+        className={
+          window.Telegram.WebApp.themeParams.bg_color === '#ffffff'
+            ? `${styles.buttons} ${styles.isLight}`
+            : styles.buttons
+        }>
         <button className={styles.btn}>
           <Paperclip
             color={'#ffffff'} // Изменяем цвет иконки в зависимости от темы
