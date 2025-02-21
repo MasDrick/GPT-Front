@@ -45,6 +45,9 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
+.isLight {
+  background: #000;
+}
 .activeBtn {
   background-color: var(--tg-theme-button-color);
   color: #fff;

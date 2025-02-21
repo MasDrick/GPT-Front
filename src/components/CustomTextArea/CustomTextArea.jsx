@@ -5,6 +5,10 @@ import styles from './CustomTextArea.module.scss';
 const CustomTextArea = ({ placeholder, value, onChange }) => {
   const [active, setActive] = useState(false);
   const [message, setMessage] = useState(''); // Новое состояние для управления значением textarea
+  const [isDarkTheme, setIsDarkTheme] = useState(
+    Telegram.WebApp.themeParams?.dark_theme === 'true',
+  ); // Состояние для темной темы
+
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
 
@@ -12,13 +16,10 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
   const adjustTextareaHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      // Сбрасываем высоту
       textarea.style.height = 'auto';
-      // Устанавливаем новую высоту, но не больше максимальной
       const lineHeight = 20; // Высота строки
       const maxLines = 9; // Максимальное количество строк
       const maxHeight = lineHeight * maxLines;
-
       if (textarea.scrollHeight > maxHeight) {
         textarea.style.height = `${maxHeight}px`;
       } else {
@@ -34,10 +35,27 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
         setActive(false); // Снимаем активное состояние, если клик был вне компонента
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Обработчик изменения темы
+  useEffect(() => {
+    const handleThemeChange = () => {
+      setIsDarkTheme(Telegram.WebApp.themeParams?.dark_theme === 'true');
+    };
+
+    // Подписываемся на событие изменения темы
+    Telegram.WebApp.onEvent('themeChanged', handleThemeChange);
+
+    // Инициализация темы при монтировании компонента
+    handleThemeChange();
+
+    return () => {
+      // Отписываемся от события при размонтировании компонента
+      Telegram.WebApp.offEvent('themeChanged', handleThemeChange);
     };
   }, []);
 
@@ -49,11 +67,9 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
       textareaRef.current.focus();
       const textarea = textareaRef.current;
       textarea.style.height = 'auto';
-      // Устанавливаем новую высоту, но не больше максимальной
       const lineHeight = 20; // Высота строки
       const maxLines = 9; // Максимальное количество строк
       const maxHeight = lineHeight * maxLines; // Сбрасываем высоту textarea после очистки
-      // Устанавливаем фокус обратно на textarea
     }
   };
 
@@ -78,14 +94,20 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
         }}
       />
       <div className={styles.buttons}>
-        <button className={styles.btn}>
-          <Paperclip color="var(--tg-theme-text-color)" size={18} />
+        <button className={isDarkTheme ? `${styles.btn}` : `${styles.btn} ${styles.isLight}`}>
+          <Paperclip
+            color={isDarkTheme ? '#ffffff' : '#000000'} // Изменяем цвет иконки в зависимости от темы
+            size={18}
+          />
         </button>
         <button
           className={message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`}
           onClick={handleSubmit}>
           {/* Кнопка отправки вызывает handleSubmit */}
-          <ArrowUp color="var(--tg-theme-text-color)" size={18} />
+          <ArrowUp
+            color={isDarkTheme ? '#ffffff' : '#000000'} // Изменяем цвет иконки в зависимости от темы
+            size={18}
+          />
         </button>
       </div>
     </div>
