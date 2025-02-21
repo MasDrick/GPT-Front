@@ -3,12 +3,11 @@ import { useTelegram } from '../../hooks/useTelegram';
 import { Paperclip, ArrowUp } from 'lucide-react';
 import styles from './CustomTextArea.module.scss';
 
-const CustomTextArea = ({ placeholder, value, onChange }) => {
+const CustomTextArea = ({ placeholder }) => {
   const [active, setActive] = useState(false);
-  const [message, setMessage] = useState(''); // Новое состояние для управления значением textarea
-
+  const [message, setMessage] = useState(''); // Состояние для управления значением textarea
+  const [botResponse, setBotResponse] = useState(''); // Состояние для хранения ответа от бота
   const { tg } = useTelegram();
-
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
 
@@ -41,22 +40,45 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
     };
   }, []);
 
-  // Обработчик изменения темы
-
   // Функция для отправки сообщения
   const handleSubmit = () => {
     if (message.trim() !== '') {
       console.log('Отправлено сообщение:', message); // Выводим сообщение в консоль
-      setMessage(''); // Очищаем значение textarea
-      textareaRef.current.focus();
+
+      // Отправляем данные в бота
+      tg.sendData(JSON.stringify({ text: message }));
+
+      // Очищаем значение textarea
+      setMessage('');
+
+      // Сбрасываем высоту textarea после очистки
       const textarea = textareaRef.current;
-      textarea.style.height = 'auto';
-      const lineHeight = 20; // Высота строки
-      const maxLines = 9; // Максимальное количество строк
-      const maxHeight = lineHeight * maxLines; // Сбрасываем высоту textarea после очистки
-      console.log(tg.themeParams.bg_color);
+      if (textarea) {
+        textarea.style.height = 'auto';
+      }
+
+      // Закрываем Mini App и ждем ответа от бота
+      tg.close();
     }
   };
+
+  // Получение ответа от бота при закрытии Mini App
+  useEffect(() => {
+    const handleWebAppClosed = () => {
+      const data = JSON.parse(tg?.WebApp?.data || '{}'); // Получаем данные от бота
+      const response = data.response || '';
+      setBotResponse(response); // Устанавливаем ответ бота в состояние
+    };
+
+    // Проверяем, закрыто ли Mini App
+    if (tg.WebApp?.ready) {
+      tg.WebApp.onEvent('close', handleWebAppClosed);
+    }
+
+    return () => {
+      tg.WebApp.offEvent('close', handleWebAppClosed);
+    };
+  }, [tg]);
 
   return (
     <div
@@ -66,6 +88,13 @@ const CustomTextArea = ({ placeholder, value, onChange }) => {
         e.stopPropagation(); // Предотвращаем распространение события наверх
         setActive(true); // Активируем состояние при клике на контейнер
       }}>
+      {/* Отображение ответа от бота */}
+      {botResponse && (
+        <div className={styles.bot_response}>
+          <strong>Ответ бота:</strong> {botResponse}
+        </div>
+      )}
+
       <textarea
         ref={textareaRef}
         placeholder={placeholder || 'Спросить у InsuGPT'}
