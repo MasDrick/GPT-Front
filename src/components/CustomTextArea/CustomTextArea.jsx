@@ -3,12 +3,21 @@ import { useTelegram } from '../../hooks/useTelegram';
 import { Paperclip, ArrowUp } from 'lucide-react';
 import styles from './CustomTextArea.module.scss';
 
+import { useAtom } from 'jotai';
+import { answerBot, messageUser } from '../../store/atoms';
+import axios from 'axios';
+
 const CustomTextArea = ({ placeholder }) => {
   const [active, setActive] = useState(false);
-  const [message, setMessage] = useState(''); // Новое состояние для управления значением textarea
-  const { tg } = useTelegram();
+  const [message, setMessage] = useState('');
+
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
+
+  const [, setMessageAtom] = useAtom(messageUser);
+  const [, setAnswer] = useAtom(answerBot);
+
+  const { tg, queryId } = useTelegram();
 
   // Функция для автоматического изменения высоты textarea
   const adjustTextareaHeight = () => {
@@ -43,10 +52,8 @@ const CustomTextArea = ({ placeholder }) => {
   const handleSubmit = () => {
     if (message.trim() !== '') {
       console.log('Отправлено сообщение:', message); // Выводим сообщение в консоль
-
-      // Отправляем данные в бота
-      tg.sendData(message);
-
+      fetchData();
+      setMessageAtom(message);
       // Очищаем значение textarea
       setMessage('');
       textareaRef.current.focus();
@@ -57,6 +64,14 @@ const CustomTextArea = ({ placeholder }) => {
         textarea.style.height = 'auto';
       }
     }
+  };
+
+  const fetchData = () => {
+    axios
+      .post(`http://127.0.0.1:8000/generate_text/?prompt=${message}&user_id=${queryId}`)
+      .then((r) => {
+        setAnswer(r.data.response);
+      });
   };
 
   return (
@@ -77,6 +92,13 @@ const CustomTextArea = ({ placeholder }) => {
         onChange={(e) => {
           setMessage(e.target.value); // Обновляем локальное состояние при вводе текста
           adjustTextareaHeight(); // Вызываем функцию при изменении текста
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            // Проверяем, была ли нажата клавиша Enter без Shift
+            e.preventDefault(); // Предотвращаем перенос строки
+            handleSubmit(); // Вызываем функцию отправки сообщения
+          }
         }}
       />
       <div className={styles.buttons}>
