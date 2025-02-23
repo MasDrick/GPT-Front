@@ -17,7 +17,7 @@ const CustomTextArea = ({ placeholder }) => {
   const [, setMessageAtom] = useAtom(messageUser);
   const [, setAnswer] = useAtom(answerBot);
 
-  const { tg, queryId } = useTelegram();
+  const { tg, queryId, urlBack } = useTelegram();
 
   // Функция для автоматического изменения высоты textarea
   const adjustTextareaHeight = () => {
@@ -67,11 +67,9 @@ const CustomTextArea = ({ placeholder }) => {
   };
 
   const fetchData = () => {
-    axios
-      .post(`http://127.0.0.1:8000/generate_text/?prompt=${message}&user_id=${queryId}`)
-      .then((r) => {
-        setAnswer(r.data.response);
-      });
+    axios.post(`${urlBack}/generate_text/?prompt=${message}&user_id=${queryId}`).then((r) => {
+      setAnswer(r.data.response);
+    });
   };
 
   return (

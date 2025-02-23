@@ -1,4 +1,5 @@
 const tg = window.Telegram.WebApp;
+const urlBack = 'https://fastapi-production-c93c.up.railway.app';
 
 export function useTelegram() {
   const onClose = () => {
@@ -17,6 +18,7 @@ export function useTelegram() {
     onClose,
     onToggleButton,
     tg,
+    urlBack,
     user: tg.initDataUnsafe?.user,
     queryId: tg.initDataUnsafe?.query_id,
   };
