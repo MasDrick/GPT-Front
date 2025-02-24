@@ -4,7 +4,7 @@ import { Paperclip, ArrowUp } from 'lucide-react';
 import styles from './CustomTextArea.module.scss';
 
 import { useAtom } from 'jotai';
-import { answerBot, messageUser } from '../../store/atoms';
+import { chatHistoryAtom } from '../../store/atoms';
 import axios from 'axios';
 
 const CustomTextArea = ({ placeholder }) => {
@@ -14,8 +14,7 @@ const CustomTextArea = ({ placeholder }) => {
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
 
-  const [, setMessageAtom] = useAtom(messageUser);
-  const [, setAnswer] = useAtom(answerBot);
+  const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
 
   const { tg, queryId, urlBack } = useTelegram();
 
@@ -51,25 +50,25 @@ const CustomTextArea = ({ placeholder }) => {
   // Функция для отправки сообщения
   const handleSubmit = () => {
     if (message.trim() !== '') {
-      console.log('Отправлено сообщение:', message); // Выводим сообщение в консоль
-      fetchData();
-      setMessageAtom(message);
-      // Очищаем значение textarea
+      // Добавляем сообщение пользователя в историю чата
+      setChatHistory((prev) => [...prev, { type: 'user', text: message }]);
       setMessage('');
-      textareaRef.current.focus();
 
-      // Сбрасываем высоту textarea после очистки
-      const textarea = textareaRef.current;
-      if (textarea) {
-        textarea.style.height = 'auto';
-      }
+      // Отправляем запрос на сервер
+      axios
+        .post(`${urlBack}/generate_text/?prompt=${message}&user_id=${queryId}`)
+        .then((response) => {
+          const botResponse = response.data.response;
+          setChatHistory((prev) => [...prev, { type: 'bot', text: botResponse }]);
+        })
+        .catch((error) => {
+          console.error('Ошибка при получении ответа:', error);
+          setChatHistory((prev) => [
+            ...prev,
+            { type: 'bot', text: 'Произошла ошибка. Пожалуйста, попробуйте позже.' },
+          ]);
+        });
     }
-  };
-
-  const fetchData = () => {
-    axios.post(`${urlBack}/generate_text/?prompt=${message}&user_id=${queryId}`).then((r) => {
-      setAnswer(r.data.response);
-    });
   };
 
   return (
@@ -82,7 +81,7 @@ const CustomTextArea = ({ placeholder }) => {
       }}>
       <textarea
         ref={textareaRef}
-        placeholder={placeholder || 'Спросить у InsuGPT'}
+        placeholder={'Спросить у InsuGPT'}
         className={styles.textarea}
         value={message} // Используем локальное состояние для управления значением
         onFocus={() => setActive(true)} // Активируем состояние при фокусе на textarea

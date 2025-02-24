@@ -3,39 +3,38 @@ import { useState, useEffect } from 'react';
 import { useTelegram } from '../../hooks/useTelegram';
 
 import Header from '../../components/Header/Header';
+import ChatHistory from '../../components/ChatHistory/ChatHistory';
 import CustomTextArea from '../../components/CustomTextArea/CustomTextArea';
 
 import { useAtom } from 'jotai';
-import { messageUser, answerBot } from '../../store/atoms';
+import { chatHistoryAtom } from '../../store/atoms';
 
 import s from './home.module.scss';
 
 const Home = () => {
   const { onClose, user } = useTelegram();
 
-  const [message] = useAtom(messageUser);
-  const [answer] = useAtom(answerBot);
+  const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
 
   return (
     <div className={s.container}>
-      <Header />
+      <div className={s.header}>
+        <Header />
+      </div>
 
-      {message !== '' ? (
-        <div className={s.content}>
-          <div className={`${s.userMes} ${s.messageBox}`}>
-            <p>{message}</p>
-          </div>
-          <div className={`${s.bot} ${s.messageBox}`}>
-            <p>{answer}</p>
-          </div>
-        </div>
-      ) : (
-        <h1>
-          Привет, <span className={s.user}>{user?.first_name}</span> <br /> Чем я могу помочь?
-        </h1>
-      )}
+      <div className={s.chatHistory}>
+        {chatHistory !== '' ? (
+          <ChatHistory chatHistory={chatHistory} />
+        ) : (
+          <h1>
+            Привет, <span className={s.user}>{user?.first_name}</span> <br /> Чем я могу помочь?
+          </h1>
+        )}
+      </div>
 
-      <CustomTextArea />
+      <div className={s.customTextarea}>
+        <CustomTextArea />
+      </div>
     </div>
   );
 };
