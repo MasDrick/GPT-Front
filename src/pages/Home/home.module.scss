@@ -17,20 +17,24 @@
     color: var(--tg-theme-accent-text-color);
   }
 }
+.wrapHello {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .header {
   position: sticky; /* Прилипание к верху */
   top: 0;
   z-index: 10; /* Чтобы header был поверх других элементов */
   background: var(--tg-theme-secondary-bg-color); /* Цвет фона для header */
-  border-bottom: 1px solid var(--tg-theme-bg-color);
 
   padding: 20px;
 }
 .chatHistory {
   flex-grow: 1;
-  padding: 10px 20px 0;
+
   overflow-y: auto;
-  margin-top: 10px;
 }
 .customTextarea {
   position: sticky; /* Прилипание к низу */
