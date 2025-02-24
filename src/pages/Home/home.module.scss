@@ -5,7 +5,7 @@
   width: 100%;
   max-width: 640px;
   margin: 0 auto;
-  padding: 20px;
+
   height: 100vh;
   background: var(--tg-theme-secondary-bg-color);
   color: var(--tg-theme-text-color);
@@ -23,9 +23,11 @@
   z-index: 10; /* Чтобы header был поверх других элементов */
   background: var(--tg-theme-bg-color); /* Цвет фона для header */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для отделения от чата */
+  padding: 20px;
 }
 .chatHistory {
   flex-grow: 1; /* Занимает всё оставшееся место */
+  padding: 10px 20px;
   overflow-y: auto; /* Добавляем прокрутку для истории чата */
 }
 .customTextarea {
@@ -33,9 +35,7 @@
   bottom: 0;
   z-index: 10; /* Чтобы textarea был поверх других элементов */
 
-  padding-top: 10px; /* Отступы внутри textarea */
-  border-top: 1px solid var(--tg-theme-hint-color); /* Линия разделения */
-  margin-top: 10px;
+  padding: 20px; /* Отступы внутри textarea */
 }
 
 .btn {

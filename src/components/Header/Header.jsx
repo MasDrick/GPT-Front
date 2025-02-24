@@ -1,11 +1,12 @@
 import React from 'react';
+import { Menu } from 'lucide-react';
 
 import s from './header.module.scss';
 
 const Header = () => {
   return (
     <div className={s.header}>
-      <button>Burger</button>
+      <Menu />
 
       <button>clear</button>
     </div>
