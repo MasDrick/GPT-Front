@@ -1,6 +1,4 @@
 import React from 'react';
-import UserMessage from '../UserMessage';
-import BotMessage from '../BotMessage/BotMessage';
 
 import s from './ChatHistory.module.scss';
 

@@ -19,9 +19,9 @@ const Header = () => {
 
   return (
     <div className={s.header}>
-      <Menu />
+      <Menu className={s.btn} />
 
-      <Eraser onClick={clearHistory} />
+      <Eraser className={s.btn} onClick={clearHistory} />
     </div>
   );
 };
