@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, Eraser } from 'lucide-react';
 
 import s from './header.module.scss';
 
@@ -8,7 +8,7 @@ const Header = () => {
     <div className={s.header}>
       <Menu />
 
-      <button>clear</button>
+      <Eraser />
     </div>
   );
 };
