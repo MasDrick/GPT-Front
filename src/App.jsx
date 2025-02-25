@@ -21,12 +21,10 @@ function App() {
   const [theme, setTheme] = useState({
     token: {
       colorPrimary: tg.themeParams?.button_color, // Заглушка
-      colorWarning: tg.themeParams?.destructive_text_color,
-      colorText: tg.themeParams?.text_color,
-      colorBgContainer: tg.themeParams?.secondary_bg_color,
-      drawerBgColor: tg.themeParams?.secondary_bg_color, // Цвет фона
-      drawerHeaderBgColor: tg.themeParams?.header_bg_color, // Цвет заголовка
-      drawerTextColor: tg.themeParams?.text_color,
+      colorInfo: tg.themeParams?.button_color,
+      colorBgBase: tg.themeParams?.bg_color,
+      colorTextBase: tg.themeParams?.text_color,
+      colorLink: tg.themeParams?.link_color,
     },
   });
 

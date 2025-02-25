@@ -9,18 +9,14 @@ import ChatHistory from '../../components/ChatHistory/ChatHistory';
 import CustomTextArea from '../../components/CustomTextArea/CustomTextArea';
 
 import { useAtom } from 'jotai';
-import { chatHistoryAtom, isClear } from '../../store/atoms';
+import { chatHistoryAtom, isClear, openDrawer } from '../../store/atoms';
 
 import s from './home.module.scss';
 
 const Home = () => {
   const { user } = useTelegram();
 
-  const [open, setOpen] = useState(false);
-
-  const showDrawer = () => {
-    setOpen(true);
-  };
+  const [open, setOpen] = useAtom(openDrawer);
 
   const onClose = () => {
     setOpen(false);
@@ -31,10 +27,13 @@ const Home = () => {
 
   return (
     <div className={s.container}>
-      <Button type="primary" onClick={showDrawer}>
-        Open
-      </Button>
-      <Drawer title="Basic Drawer" onClose={onClose} open={open} placement="left" closable={false}>
+      <Drawer
+        title="Basic Drawer"
+        onClose={onClose}
+        open={open}
+        placement="left"
+        closable={false}
+        getContainer={false}>
         <p>Some contents...</p>
         <p>Some contents...</p>
         <p>Some contents...</p>
