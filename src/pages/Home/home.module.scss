@@ -25,7 +25,8 @@
   justify-content: center;
 }
 .header {
-  position: sticky; /* Прилипание к верху */
+  position: absolute;
+  width: 100%;
   top: 0;
   z-index: 10; /* Чтобы header был поверх других элементов */
   background: var(--tg-theme-secondary-bg-color); /* Цвет фона для header */
@@ -34,7 +35,7 @@
 }
 .chatHistory {
   flex-grow: 1;
-
+  margin-top: 64px;
   overflow-y: auto;
 }
 .customTextarea {
