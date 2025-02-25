@@ -25,7 +25,7 @@ function App() {
       colorError: '#ff4d4f',
       colorWarning: '#faad14',
       colorText: '#000000',
-      colorBgContainer: '#ffffff',
+      colorBgContainer: tg.themeParams?.secondary_bg_color,
     },
   });
 
