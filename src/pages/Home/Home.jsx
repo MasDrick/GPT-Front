@@ -10,6 +10,8 @@ import Drawer from '../../components/Drawer/Drawer';
 import { useAtom } from 'jotai';
 import { chatHistoryAtom, isClear, openDrawer } from '../../store/atoms';
 
+import { messages } from '../../messages';
+
 import s from './home.module.scss';
 
 const Home = () => {
@@ -20,9 +22,21 @@ const Home = () => {
   const [chatHistory] = useAtom(chatHistoryAtom);
   const [clear] = useAtom(isClear);
 
+  const [randomMessage, setRandomMessage] = useState('');
+
+  // Функция для выбора случайного сообщения
+  const getRandomMessage = () => {
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    return messages[randomIndex];
+  };
+
+  useEffect(() => {
+    setRandomMessage(getRandomMessage());
+  }, [chatHistory.length === 0]);
+
   return (
     <>
-      {open && <Drawer />}
+      <Drawer />
       <div className={s.header}>
         <Header />
       </div>
@@ -34,7 +48,7 @@ const Home = () => {
           ) : (
             <div className={s.wrapHello}>
               {clear ? (
-                <h1>Ну и зачем очистил?</h1>
+                <h1>{randomMessage}</h1>
               ) : (
                 <h1>
                   Привет, <span className={s.user}>{user?.first_name}</span> <br /> Чем я могу

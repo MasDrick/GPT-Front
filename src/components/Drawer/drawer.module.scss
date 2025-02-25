@@ -4,8 +4,12 @@
   max-width: 330px;
   height: 100vh;
   background: var(--tg-theme-secondary-bg-color);
+  // background: #000;
   color: var(--tg-theme-text-color);
   z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .overlay {
   position: fixed;
