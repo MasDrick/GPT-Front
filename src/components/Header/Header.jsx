@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { Menu, Eraser } from 'lucide-react';
 
 import { useAtom } from 'jotai';
@@ -10,19 +11,37 @@ const Header = () => {
   const [history, setHistory] = useAtom(chatHistoryAtom);
   const [, setClear] = useAtom(isClear);
   const [, setOpen] = useAtom(openDrawer);
+  const [openModal, setOpenModal] = useState(false);
 
-  const clearHistory = () => {
+  const onClickEraser = () => {
     if (history.length !== 0) {
-      setHistory([]);
-      setClear(true);
+      setOpenModal(true);
     }
+  };
+  const clearHistory = () => {
+    setHistory([]);
+    setClear(true);
+    setOpenModal(false);
   };
 
   return (
     <div className={s.header}>
       <Menu onClick={() => setOpen(true)} className={s.btn} />
 
-      <Eraser className={s.btn} onClick={clearHistory} />
+      <Eraser className={s.btn} onClick={onClickEraser} />
+      {openModal && (
+        <div className={s.overlay}>
+          <div className={s.modal}>
+            <h2>Вы хотите удалить чат?</h2>
+            <div className={s.btns}>
+              <button onClick={clearHistory} className={s.yes}>
+                да
+              </button>
+              <button onClick={() => setOpenModal(false)}>нет</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

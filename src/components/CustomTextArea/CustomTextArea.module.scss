@@ -22,6 +22,8 @@
   overflow-y: auto; /* Появление скролла при превышении максимальной высоты */
   line-height: 20px; /* Высота строки для точного расчета */
   outline: none;
+  font-family: inherit;
+  font-size: inherit;
   &::placeholder {
     color: #bfbfbf; /* Цвет плейсхолдера */
   }

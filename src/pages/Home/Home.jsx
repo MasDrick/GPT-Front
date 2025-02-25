@@ -36,9 +36,11 @@ const Home = () => {
 
   return (
     <>
-      <Drawer />
-      <div className={s.header}>
-        <Header />
+      <div className={s.wrapper}>
+        <Drawer />
+        <div className={s.header}>
+          <Header />
+        </div>
       </div>
 
       <div className={s.container}>
