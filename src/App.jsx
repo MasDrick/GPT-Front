@@ -20,31 +20,15 @@ function App() {
 
   const [theme, setTheme] = useState({
     token: {
-      colorPrimary: '#2196f3', // Заглушка
-      colorSuccess: '#52c41a',
-      colorError: '#ff4d4f',
-      colorWarning: '#faad14',
-      colorText: '#000000',
+      colorPrimary: tg.themeParams?.button_color, // Заглушка
+      colorWarning: tg.themeParams?.destructive_text_color,
+      colorText: tg.themeParams?.text_color,
       colorBgContainer: tg.themeParams?.secondary_bg_color,
     },
   });
 
   useEffect(() => {
     // Получаем цвета из Telegram
-    const tg = window.Telegram.WebApp;
-
-    // Получаем цвета из tg.themeParams
-    const getTelegramColors = () => ({
-      colorPrimary: tg.themeParams?.accent_text_color, // Акцентный текст
-      colorSuccess: tg.themeParams?.section_header_text_color, // Успешное действие
-      colorError: tg.themeParams?.destructive_text_color, // Ошибка
-      colorWarning: tg.themeParams?.link_color, // Предупреждение (используем цвет ссылки)
-      colorText: tg.themeParams?.text_color, // Основной текст
-      colorBgContainer: tg.themeParams?.secondary_bg_color, // Фон контейнера
-    });
-
-    // Применяем цвета при загрузке
-    setTheme({ token: getTelegramColors() });
 
     // Обновляем цвета при изменении темы
     tg.onEvent('themeChanged', () => {
