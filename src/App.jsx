@@ -20,7 +20,7 @@ function App() {
 
   const [theme, setTheme] = useState({
     token: {
-      colorPrimary: '#2196f3',
+      colorPrimary: '#2196f3', // Заглушка
       colorSuccess: '#52c41a',
       colorError: '#ff4d4f',
       colorWarning: '#faad14',
@@ -30,47 +30,28 @@ function App() {
   });
 
   useEffect(() => {
-    if (window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp;
+    // Получаем цвета из Telegram
+    const tg = window.Telegram.WebApp;
 
-      const isValidColor = (color) => /^#([A-Fa-f0-9]{6})$/.test(color);
+    // Получаем цвета из tg.themeParams
+    const getTelegramColors = () => ({
+      colorPrimary: tg.themeParams?.accent_text_color, // Акцентный текст
+      colorSuccess: tg.themeParams?.section_header_text_color, // Успешное действие
+      colorError: tg.themeParams?.destructive_text_color, // Ошибка
+      colorWarning: tg.themeParams?.link_color, // Предупреждение (используем цвет ссылки)
+      colorText: tg.themeParams?.text_color, // Основной текст
+      colorBgContainer: tg.themeParams?.secondary_bg_color, // Фон контейнера
+    });
 
-      const getTelegramColors = () => ({
-        colorPrimary: isValidColor(tg.themeParams?.accent_text_color)
-          ? tg.themeParams?.accent_text_color
-          : '#2196f3',
-        colorSuccess: isValidColor(tg.themeParams?.section_header_text_color)
-          ? tg.themeParams?.section_header_text_color
-          : '#52c41a',
-        colorError: isValidColor(tg.themeParams?.destructive_text_color)
-          ? tg.themeParams?.destructive_text_color
-          : '#ff4d4f',
-        colorWarning: isValidColor(tg.themeParams?.link_color)
-          ? tg.themeParams?.link_color
-          : '#faad14',
-        colorText: isValidColor(tg.themeParams?.text_color)
-          ? tg.themeParams?.text_color
-          : '#000000',
-        colorBgContainer: isValidColor(tg.themeParams?.secondary_bg_color)
-          ? tg.themeParams?.secondary_bg_color
-          : '#ffffff',
-      });
+    // Применяем цвета при загрузке
+    setTheme({ token: getTelegramColors() });
 
-      const updateTheme = () => {
-        setTheme({ token: getTelegramColors() });
-      };
-
-      // Применяем тему при загрузке
-      updateTheme();
-
-      // Обновляем тему при изменении
-      tg.onEvent('themeChanged', updateTheme);
-
-      // Очистка подписки при размонтировании
-      return () => {
-        tg.offEvent('themeChanged', updateTheme);
-      };
-    }
+    // Обновляем цвета при изменении темы
+    tg.onEvent('themeChanged', () => {
+      setTheme({ token: getTelegramColors() });
+    });
+    console.log(theme.token);
+    console.log(window.Telegram.WebApp.themeParams);
   }, []);
 
   return (
