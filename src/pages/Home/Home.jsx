@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import { Button } from 'antd';
+
 import { useTelegram } from '../../hooks/useTelegram';
 
 import Header from '../../components/Header/Header';
@@ -19,6 +21,9 @@ const Home = () => {
 
   return (
     <div className={s.container}>
+      <Button color="primary" variant="solid">
+        Solid
+      </Button>
       <div className={s.header}>
         <Header />
       </div>

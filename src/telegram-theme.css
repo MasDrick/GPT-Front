@@ -1,0 +1,13 @@
+:root {
+  --ant-primary-color: var(--tg-theme-accent-button-color); /* Основной цвет (акцент) */
+  --ant-success-color: var(--tg-theme-link-color); /* Цвет успеха (ссылки) */
+  --ant-error-color: var(--tg-theme-negative-color); /* Цвет ошибки (отрицательный) */
+  --ant-warning-color: var(--tg-theme-button-color); /* Цвет предупреждения (кнопки) */
+  --ant-processing-color: var(--tg-theme-accent-color); /* Цвет процесса (акцентный текст) */
+  --ant-font-size-base: var(--tg-theme-font-size-base, 16px); /* Базовый размер шрифта */
+  --ant-border-radius-base: var(--tg-theme-border-radius-base, 8px); /* Радиус углов */
+  --ant-component-background: var(--tg-theme-bg-color); /* Фон компонентов */
+  --ant-body-background: var(--tg-theme-bg-color); /* Фон страницы */
+  --ant-text-color: var(--tg-theme-text-color); /* Цвет основного текста */
+  --ant-text-color-secondary: var(--tg-theme-hint-color); /* Цвет вторичного текста */
+}
