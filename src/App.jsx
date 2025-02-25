@@ -35,12 +35,12 @@ function App() {
 
     // Получаем цвета из tg.themeParams
     const getTelegramColors = () => ({
-      colorPrimary: tg.themeParams?.accent_color || '#2196f3',
-      colorSuccess: tg.themeParams?.positive_color || '#52c41a',
-      colorError: tg.themeParams?.negative_color || '#ff4d4f',
-      colorWarning: tg.themeParams?.warning_color || '#faad14',
-      colorText: tg.themeParams?.text_color || '#000000',
-      colorBgContainer: tg.themeParams?.secondary_bg_color || '#ffffff',
+      colorPrimary: tg.themeParams?.accent_color,
+      colorSuccess: tg.themeParams?.positive_color,
+      colorError: tg.themeParams?.negative_color,
+      colorWarning: tg.themeParams?.warning_color,
+      colorText: tg.themeParams?.text_color,
+      colorBgContainer: tg.themeParams?.secondary_bg_color,
     });
 
     // Применяем цвета при загрузке
