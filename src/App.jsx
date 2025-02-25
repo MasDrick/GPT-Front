@@ -16,6 +16,7 @@ function App() {
 
   useEffect(() => {
     tg.ready();
+    tg.expand();
   }, []);
 
   const [theme, setTheme] = useState({
