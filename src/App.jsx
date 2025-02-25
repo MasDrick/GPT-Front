@@ -50,6 +50,8 @@ function App() {
     tg.onEvent('themeChanged', () => {
       setTheme({ token: getTelegramColors() });
     });
+    console.log(theme.token);
+    console.log(window.Telegram.WebApp.themeParams);
   }, []);
 
   return (
