@@ -6,6 +6,9 @@
 .btn {
   cursor: pointer;
 }
+.unactive {
+  color: #999999;
+}
 .overlay {
   display: flex;
   justify-content: center;
@@ -43,10 +46,11 @@
         padding: 10px 15px;
         background: var(--tg-theme-secondary-bg-color);
         border: 1px solid var(--tg-theme-text-color);
-        font-size: 16px;
+        font-size: 14px;
         border-radius: 8px;
         color: var(--tg-theme-text-color);
         transition: all 0.2s ease-in-out;
+        text-transform: uppercase;
 
         &:hover {
           border-color: var(--tg-theme-button-color);

@@ -28,7 +28,10 @@ const Header = () => {
     <div className={s.header}>
       <Menu onClick={() => setOpen(true)} className={s.btn} />
 
-      <Eraser className={s.btn} onClick={onClickEraser} />
+      <Eraser
+        className={`${s.btn} ${history.length === 0 ? s.unactive : ''}`}
+        onClick={onClickEraser}
+      />
       {openModal && (
         <div className={s.overlay}>
           <div className={s.modal}>
