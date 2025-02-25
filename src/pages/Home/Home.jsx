@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { Button } from 'antd';
+import { Button, Drawer } from 'antd';
 
 import { useTelegram } from '../../hooks/useTelegram';
 
@@ -14,16 +14,31 @@ import { chatHistoryAtom, isClear } from '../../store/atoms';
 import s from './home.module.scss';
 
 const Home = () => {
-  const { onClose, user } = useTelegram();
+  const { user } = useTelegram();
+
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const [chatHistory] = useAtom(chatHistoryAtom);
   const [clear] = useAtom(isClear);
 
   return (
     <div className={s.container}>
-      <Button color="primary" variant="solid">
-        Solid
+      <Button type="primary" onClick={showDrawer}>
+        Open
       </Button>
+      <Drawer title="Basic Drawer" onClose={onClose} open={open} placement="left" closable={false}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Drawer>
       <div className={s.header}>
         <Header />
       </div>

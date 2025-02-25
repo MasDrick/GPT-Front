@@ -24,6 +24,9 @@ function App() {
       colorWarning: tg.themeParams?.destructive_text_color,
       colorText: tg.themeParams?.text_color,
       colorBgContainer: tg.themeParams?.secondary_bg_color,
+      drawerBgColor: tg.themeParams?.secondary_bg_color, // Цвет фона
+      drawerHeaderBgColor: tg.themeParams?.header_bg_color, // Цвет заголовка
+      drawerTextColor: tg.themeParams?.text_color,
     },
   });
 
