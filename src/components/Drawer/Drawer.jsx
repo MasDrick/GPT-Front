@@ -13,7 +13,7 @@ import { ChevronDown } from 'lucide-react';
 const Drawer = () => {
   const [open, setOpen] = useAtom(openDrawer);
 
-  const { tg } = useTelegram();
+  const { tg, user } = useTelegram();
 
   // Состояние для отслеживания развернутых пунктов меню
   const [expandedKeys, setExpandedKeys] = useState([0]); // По умолчанию разворачиваем первый пункт
@@ -86,10 +86,10 @@ const Drawer = () => {
 
         <section className={s.user}>
           <div className={s.userInfo}>
-            <img src="/masdrick.jpg" alt="avatar" className={s.avatar} />
+            <img src={user.photo_url} alt="avatar" className={s.avatar} />
             <div className={s.names}>
-              <h4>BigMaksonchik</h4>
-              <p>@MasDrick</p>
+              <h4>{user.first_name}</h4>
+              <p>@{user.username}</p>
             </div>
           </div>
         </section>
