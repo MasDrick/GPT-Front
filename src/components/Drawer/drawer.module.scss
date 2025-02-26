@@ -63,7 +63,7 @@
       .subMenuItem {
         padding: 8px 16px;
         background: var(--tg-theme-secondary-bg-color);
-        color: var(--tg-theme-text_color);
+        color: var(--tg-theme-text-color);
         margin-bottom: 8px;
         cursor: pointer;
         border-radius: 4px;
@@ -85,7 +85,7 @@
 
 .activeModel {
   opacity: 1 !important;
-  background: var(--tg-theme-button_color) !important;
+  background: var(--tg-theme-button-color) !important;
 }
 
 .overlay {
