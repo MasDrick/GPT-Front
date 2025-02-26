@@ -1,5 +1,7 @@
 .wrapper {
   display: flex;
+  position: relative;
+  z-index: 20;
 }
 .container {
   display: flex;

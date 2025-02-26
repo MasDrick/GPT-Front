@@ -26,6 +26,8 @@ function App() {
       colorBgBase: tg.themeParams?.bg_color,
       colorTextBase: tg.themeParams?.text_color,
       colorLink: tg.themeParams?.link_color,
+      colorPrimaryBg: tg.themeParams?.bg_color,
+      colorBorder: tg.themeParams?.button_text_color,
     },
   });
 
