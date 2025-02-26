@@ -24,3 +24,42 @@ export const messages = [
   'Это был смелый шаг! 🚀',
   'Теперь у нас чистый лист! ✨',
 ];
+
+export const menuTextItems = [
+  {
+    label: 'Текст 📝', // Эмодзи для текстовых моделей
+    children: [
+      { key: '1', label: 'gpt-4o 🤖' }, // Эмодзи для конкретной модели
+      { key: '2', label: 'gpt-4o-mini 💡' },
+      { key: '3', label: 'deepseek-r1 🧠' },
+      { key: '4', label: 'deepseek-v3 🚀' },
+      { key: '5', label: 'evil 👿' },
+    ],
+  },
+  {
+    label: 'Изображения', // Эмодзи для генерации изображений
+    children: [
+      { key: '6', label: 'midjourney 🎨' },
+      { key: '7', label: 'dall-e-3 🌈' },
+      { key: '8', label: 'flux 🌀' },
+    ],
+  },
+];
+
+const colors = {
+  accent_text_color: '#6ab2f2',
+  bg_color: '#17212b',
+  bottom_bar_bg_color: '#17212b',
+  button_color: '#5288c1',
+  button_text_color: '#ffffff',
+  destructive_text_color: '#ec3942',
+  header_bg_color: '#17212b',
+  hint_color: '#708499',
+  link_color: '#6ab3f3',
+  secondary_bg_color: '#232e3c',
+  section_bg_color: '#17212b',
+  section_header_text_color: '#6ab3f3',
+  section_separator_color: '#111921',
+  subtitle_text_color: '#708499',
+  text_color: '#f5f5f5',
+};

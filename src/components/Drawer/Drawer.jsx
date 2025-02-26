@@ -2,30 +2,30 @@ import React, { useState } from 'react';
 import { m } from 'framer-motion';
 import { useAtom } from 'jotai';
 import { openDrawer } from '../../store/atoms';
+import { menuTextItems } from '../../messages';
+
+import { useTelegram } from '../../hooks/useTelegram';
+
 import s from './drawer.module.scss';
+
+import { ChevronDown } from 'lucide-react';
 
 const Drawer = () => {
   const [open, setOpen] = useAtom(openDrawer);
 
-  // Состояние для отслеживания развернутых пунктов меню
-  const [expandedKeys, setExpandedKeys] = useState([]);
+  const { tg } = useTelegram();
 
-  // Данные для меню
-  const menuItems = [
-    {
-      label: 'Текст',
-      children: [
-        { key: '1', label: 'gpt-4o' },
-        { key: '2', label: 'gpt-4o-mini' },
-        { key: '3', label: 'deepseek-R1' },
-        { key: '4', label: 'evil' },
-      ],
-    },
-  ];
+  // Состояние для отслеживания развернутых пунктов меню
+  const [expandedKeys, setExpandedKeys] = useState([0]); // По умолчанию разворачиваем первый пункт
+
+  // Состояние для отслеживания активных моделей
+  const [activeModel, setActiveModel] = useState('1'); // По умолчанию активна модель с key: '1'
 
   // Обработчик клика по пункту меню
-  const handleItemClick = (key) => {
-    console.log('Selected:', key);
+  const handleItemClick = (child) => {
+    setActiveModel(child.key); // Обновляем активную модель
+    console.log('Selected:', child.label);
+    console.log(tg.initData);
   };
 
   // Обработчик клика по родительскому пункту
@@ -43,17 +43,22 @@ const Drawer = () => {
         initial={{ x: '-100%' }}
         animate={{ x: open ? 0 : '-100%' }}
         exit={{ x: '-100%' }}
-        transition={{ type: 'spring', stiffness: 300, damping: 21 }}>
+        transition={{ type: 'spring', stiffness: 350, damping: 20 }}>
+        <div className="null">
+          <h4>Хз че сюда вставить</h4>
+        </div>
+
         <div className={s.menuContainer}>
           {/* Рендеринг меню */}
-          {menuItems.map((item, index) => (
+          {menuTextItems.map((item, index) => (
             <div key={index} className={s.menuItem}>
               {/* Родительский пункт с анимацией */}
               <m.span
                 whileTap={{ scale: 0.95 }} // Эффект нажатия
                 onClick={() => handleToggle(index)}
-                className={s.menuLabel}>
+                className={`${s.menuLabel} ${expandedKeys.includes(index) ? s.active : ''}`}>
                 {item.label}
+                <ChevronDown size={20} />
               </m.span>
 
               {/* Подменю с анимацией */}
@@ -69,8 +74,8 @@ const Drawer = () => {
                 {item.children.map((child) => (
                   <li
                     key={child.key}
-                    className={s.subMenuItem}
-                    onClick={() => handleItemClick(child.key)}>
+                    className={`${s.subMenuItem} ${activeModel === child.key ? s.activeModel : ''}`}
+                    onClick={() => handleItemClick(child)}>
                     {child.label}
                   </li>
                 ))}
@@ -78,6 +83,16 @@ const Drawer = () => {
             </div>
           ))}
         </div>
+
+        <section className={s.user}>
+          <div className={s.userInfo}>
+            <img src="/masdrick.jpg" alt="avatar" className={s.avatar} />
+            <div className={s.names}>
+              <h4>BigMaksonchik</h4>
+              <p>@MasDrick</p>
+            </div>
+          </div>
+        </section>
       </m.div>
 
       {/* Фоновая затемненная область */}
