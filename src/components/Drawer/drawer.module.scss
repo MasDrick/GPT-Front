@@ -4,13 +4,54 @@
   max-width: 330px;
   height: 100vh;
   background: var(--tg-theme-secondary-bg-color);
-  background: #000;
   color: var(--tg-theme-text-color);
   z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+
+  .menuContainer {
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    max-width: 280px;
+    background: var(--tg-theme-secondary-bg-color);
+  }
+
+  .menuItem {
+    margin-bottom: 16px;
+
+    .menuLabel {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
+      cursor: pointer;
+    }
+
+    .subMenu {
+      overflow: hidden; // Для анимации высоты
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      .subMenuItem {
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #f0f8ff;
+        }
+
+        &.active {
+          background-color: #d1eaff;
+          color: #1890ff;
+        }
+      }
+    }
+  }
 }
 .overlay {
   position: fixed;
