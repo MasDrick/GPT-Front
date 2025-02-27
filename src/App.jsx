@@ -19,17 +19,23 @@ function App() {
       colorBorder: tg.themeParams?.button_text_color,
     },
   });
+
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   useEffect(() => {
-    // Инициализация Telegram Mini App
     tg.ready();
     tg.expand();
-    tg.requestFullscreen();
 
-    // Детектирование появления клавиатуры
     const handleResize = () => {
-      const isKeyboardVisible = window.innerHeight < screen.height;
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      let isKeyboardVisible = false;
+
+      if (isIOS && window.visualViewport) {
+        isKeyboardVisible = window.visualViewport.height < window.innerHeight;
+      } else {
+        isKeyboardVisible = window.innerHeight < screen.height;
+      }
+
       setIsKeyboardOpen(isKeyboardVisible);
 
       if (isKeyboardVisible) {
@@ -39,9 +45,24 @@ function App() {
       }
     };
 
+    const handleFocus = (event) => {
+      if (isKeyboardOpen) {
+        setTimeout(() => {
+          event.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+      }
+    };
+
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    document.addEventListener('focusin', handleFocus); // Работает при фокусе на инпуте
+    document.addEventListener('focusout', handleResize); // При скрытии клавиатуры
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('focusin', handleFocus);
+      document.removeEventListener('focusout', handleResize);
+    };
+  }, [isKeyboardOpen]);
 
   return (
     <ConfigProvider theme={theme}>
@@ -56,7 +77,5 @@ function App() {
     </ConfigProvider>
   );
 }
-
-// Функция для получения цветов из Telegram
 
 export default App;
