@@ -45,21 +45,6 @@ const CustomTextArea = ({ placeholder }) => {
   }, []);
 
   // Обработка изменения размера окна (для детектирования клавиатуры)
-  useEffect(() => {
-    const handleResize = () => {
-      const isKeyboardVisible = window.innerHeight < screen.height;
-      setIsKeyboardOpen(isKeyboardVisible);
-
-      if (isKeyboardVisible) {
-        tg.expand(); // Расширяем приложение, когда клавиатура открыта
-      } else {
-        tg.closeMenu(); // Возвращаем стандартный размер, когда клавиатура закрыта
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [tg]);
 
   // Функция для отправки сообщения
   const handleSubmit = () => {

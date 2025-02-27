@@ -27,14 +27,10 @@ function App() {
 
   return (
     <ConfigProvider theme={theme}>
-      <div id="app" className="app">
-        <div className="content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/develop" element={<Development />} />
-          </Routes>
-        </div>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/develop" element={<Development />} />
+      </Routes>
     </ConfigProvider>
   );
 }
