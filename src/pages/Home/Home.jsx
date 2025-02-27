@@ -15,24 +15,30 @@ import { messages } from '../../messages';
 import s from './home.module.scss';
 
 const Home = () => {
-  const { user } = useTelegram();
+  const { user, tg } = useTelegram();
 
   const [open, setOpen] = useAtom(openDrawer);
-
   const [chatHistory] = useAtom(chatHistoryAtom);
   const [clear] = useAtom(isClear);
-
   const [randomMessage, setRandomMessage] = useState('');
 
-  // Функция для выбора случайного сообщения
-  const getRandomMessage = () => {
-    const randomIndex = Math.floor(Math.random() * messages.length);
-    return messages[randomIndex];
-  };
+  useEffect(() => {
+    setRandomMessage(messages[Math.floor(Math.random() * messages.length)]);
+  }, [chatHistory.length === 0]);
 
   useEffect(() => {
-    setRandomMessage(getRandomMessage());
-  }, [chatHistory.length === 0]);
+    tg.MainButton.setText('Отправить');
+    tg.MainButton.show();
+
+    tg.MainButton.onClick(() => {
+      console.log('MainButton clicked');
+      // Добавь здесь свою логику для обработки нажатия
+    });
+
+    return () => {
+      tg.MainButton.offClick();
+    };
+  }, [tg]);
 
   return (
     <>
