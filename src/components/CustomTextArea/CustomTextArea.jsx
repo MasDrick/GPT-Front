@@ -31,6 +31,25 @@ const CustomTextArea = ({ placeholder }) => {
     }
   };
 
+  useEffect(() => {
+    tg.MainButton.setText('Отправить');
+
+    return () => {
+      tg.MainButton.hide();
+      tg.MainButton.offClick();
+    };
+  }, [tg]);
+
+  const handleFocus = () => {
+    setActive(true);
+    tg.MainButton.show();
+  };
+
+  const handleBlur = () => {
+    setActive(false);
+    tg.MainButton.hide();
+  };
+
   // Отслеживание кликов вне компонента
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -83,8 +102,8 @@ const CustomTextArea = ({ placeholder }) => {
         placeholder={'Спросить у InsuGPT'}
         className={styles.textarea}
         value={message}
-        onFocus={() => setActive(true)}
-        onBlur={() => setActive(false)}
+        onFocus={handleFocus} // Показываем MainButton
+        onBlur={handleBlur} // Скрываем MainButton
         onChange={(e) => {
           setMessage(e.target.value);
           adjustTextareaHeight();
@@ -96,6 +115,7 @@ const CustomTextArea = ({ placeholder }) => {
           }
         }}
       />
+
       <div className={styles.buttons}>
         <button
           className={
