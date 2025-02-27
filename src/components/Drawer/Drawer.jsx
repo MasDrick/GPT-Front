@@ -86,10 +86,10 @@ const Drawer = () => {
 
         <section className={s.user}>
           <div className={s.userInfo}>
-            <img src={user.photo_url} alt="avatar" className={s.avatar} />
+            <img src={user?.photo_url || '/john.jpg'} alt="avatar" className={s.avatar} />
             <div className={s.names}>
-              <h4>{user.first_name}</h4>
-              <p>@{user.username}</p>
+              <h4>{user?.first_name || 'firstName'}</h4>
+              <p>@{user?.username || 'username'} </p>
             </div>
           </div>
         </section>

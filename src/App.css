@@ -1,0 +1,16 @@
+/* Общие отступы для всего приложения */
+#app {
+  padding-top: env(safe-area-inset-top); /* Учитывает системные UI элементы (адресная строка) */
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom); /* Учитывает панель навигации */
+  padding-left: env(safe-area-inset-left);
+  box-sizing: border-box;
+}
+
+/* Отступы для контента внутри */
+.content {
+  padding-top: env(
+    content-safe-area-inset-top
+  ); /* Только физические особенности (например, "челочек") */
+  padding-bottom: env(content-safe-area-inset-bottom);
+}
