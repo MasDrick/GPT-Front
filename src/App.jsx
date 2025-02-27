@@ -16,8 +16,8 @@ function App() {
 
   useEffect(() => {
     tg.ready();
-    // tg.expand();
-    tg.requestFullscreen();
+    tg.expand();
+    // tg.requestFullscreen();
   }, []);
 
   const [theme, setTheme] = useState({

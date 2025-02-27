@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useTelegram } from '../../hooks/useTelegram';
 import { Paperclip, ArrowUp } from 'lucide-react';
 import styles from './CustomTextArea.module.scss';
-
 import { useAtom } from 'jotai';
 import { chatHistoryAtom } from '../../store/atoms';
 import axios from 'axios';
@@ -10,13 +9,11 @@ import axios from 'axios';
 const CustomTextArea = ({ placeholder }) => {
   const [active, setActive] = useState(false);
   const [message, setMessage] = useState('');
-
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
-
   const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
-
   const { tg, queryId, urlBack } = useTelegram();
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   // Функция для автоматического изменения высоты textarea
   const adjustTextareaHeight = () => {
@@ -47,14 +44,29 @@ const CustomTextArea = ({ placeholder }) => {
     };
   }, []);
 
+  // Обработка изменения размера окна (для детектирования клавиатуры)
+  useEffect(() => {
+    const handleResize = () => {
+      const isKeyboardVisible = window.innerHeight < screen.height;
+      setIsKeyboardOpen(isKeyboardVisible);
+
+      if (isKeyboardVisible) {
+        tg.expand(); // Расширяем приложение, когда клавиатура открыта
+      } else {
+        tg.closeMenu(); // Возвращаем стандартный размер, когда клавиатура закрыта
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [tg]);
+
   // Функция для отправки сообщения
   const handleSubmit = () => {
     if (message.trim() !== '') {
-      // Добавляем сообщение пользователя в историю чата
       setChatHistory((prev) => [...prev, { type: 'user', text: message }]);
       setMessage('');
 
-      // Отправляем запрос на сервер
       axios
         .post(`${urlBack}/generate_text/?prompt=${message}&user_id=${queryId}`)
         .then((response) => {
@@ -74,27 +86,28 @@ const CustomTextArea = ({ placeholder }) => {
   return (
     <div
       ref={containerRef}
-      className={active ? `${styles.custom_textarea} ${styles.active}` : styles.custom_textarea}
+      className={`${styles.custom_textarea} ${active ? styles.active : ''} ${
+        isKeyboardOpen ? styles.keyboard_open : ''
+      }`}
       onClick={(e) => {
-        e.stopPropagation(); // Предотвращаем распространение события наверх
-        setActive(true); // Активируем состояние при клике на контейнер
+        e.stopPropagation();
+        setActive(true);
       }}>
       <textarea
         ref={textareaRef}
         placeholder={'Спросить у InsuGPT'}
         className={styles.textarea}
-        value={message} // Используем локальное состояние для управления значением
-        onFocus={() => setActive(true)} // Активируем состояние при фокусе на textarea
-        onBlur={() => setActive(false)} // Деактивируем состояние при потере фокуса
+        value={message}
+        onFocus={() => setActive(true)}
+        onBlur={() => setActive(false)}
         onChange={(e) => {
-          setMessage(e.target.value); // Обновляем локальное состояние при вводе текста
-          adjustTextareaHeight(); // Вызываем функцию при изменении текста
+          setMessage(e.target.value);
+          adjustTextareaHeight();
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && !e.shiftKey) {
-            // Проверяем, была ли нажата клавиша Enter без Shift
-            e.preventDefault(); // Предотвращаем перенос строки
-            handleSubmit(); // Вызываем функцию отправки сообщения
+            e.preventDefault();
+            handleSubmit();
           }
         }}
       />
@@ -103,21 +116,14 @@ const CustomTextArea = ({ placeholder }) => {
           className={
             tg.themeParams.bg_color === '#ffffff' ? `${styles.btn} ${styles.isLight}` : styles.btn
           }>
-          <Paperclip
-            color={'#ffffff'} // Изменяем цвет иконки в зависимости от темы
-            size={18}
-          />
+          <Paperclip color={'#ffffff'} size={18} />
         </button>
         <button
           className={`${message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`} ${
             tg.themeParams?.bg_color === '#ffffff' ? styles.isLight : ''
           }`}
           onClick={handleSubmit}>
-          {/* Кнопка отправки вызывает handleSubmit */}
-          <ArrowUp
-            color={'#ffffff'} // Изменяем цвет иконки в зависимости от темы
-            size={18}
-          />
+          <ArrowUp color={'#ffffff'} size={18} />
         </button>
       </div>
     </div>
