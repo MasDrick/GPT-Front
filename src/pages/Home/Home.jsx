@@ -26,19 +26,19 @@ const Home = () => {
     setRandomMessage(messages[Math.floor(Math.random() * messages.length)]);
   }, [chatHistory.length === 0]);
 
-  useEffect(() => {
-    tg.MainButton.setText('Отправить');
-    tg.MainButton.show();
+  // useEffect(() => {
+  //   tg.MainButton.setText('Отправить');
+  //   tg.MainButton.show();
 
-    tg.MainButton.onClick(() => {
-      console.log('MainButton clicked');
-      // Добавь здесь свою логику для обработки нажатия
-    });
+  //   tg.MainButton.onClick(() => {
+  //     console.log('MainButton clicked');
+  //     // Добавь здесь свою логику для обработки нажатия
+  //   });
 
-    return () => {
-      tg.MainButton.offClick();
-    };
-  }, [tg]);
+  //   return () => {
+  //     tg.MainButton.offClick();
+  //   };
+  // }, [tg]);
 
   return (
     <>
