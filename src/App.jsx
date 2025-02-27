@@ -25,6 +25,7 @@ function App() {
     // Инициализация Telegram Mini App
     tg.ready();
     tg.expand();
+    tg.requestFullscreen();
 
     // Детектирование появления клавиатуры
     const handleResize = () => {
