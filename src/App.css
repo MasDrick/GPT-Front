@@ -5,6 +5,7 @@
   padding-bottom: env(safe-area-inset-bottom); /* Учитывает панель навигации */
   padding-left: env(safe-area-inset-left);
   box-sizing: border-box;
+  transition: transform 0.3s ease; /* Плавный переход */
 }
 
 /* Отступы для контента внутри */
@@ -13,4 +14,9 @@
     content-safe-area-inset-top
   ); /* Только физические особенности (например, "челочек") */
   padding-bottom: env(content-safe-area-inset-bottom);
+}
+
+/* Когда клавиатура открыта */
+.keyboard-open #app {
+  transform: translateY(-100px); /* Сдвигаем контент вверх */
 }

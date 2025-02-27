@@ -19,22 +19,32 @@ function App() {
       colorBorder: tg.themeParams?.button_text_color,
     },
   });
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   useEffect(() => {
     // Инициализация Telegram Mini App
     tg.ready();
     tg.expand();
 
-    // Обновление темы при изменении
-    tg.onEvent('themeChanged', () => {
-      setTheme({ token: getTelegramColors(tg.themeParams) });
-    });
+    // Детектирование появления клавиатуры
+    const handleResize = () => {
+      const isKeyboardVisible = window.innerHeight < screen.height;
+      setIsKeyboardOpen(isKeyboardVisible);
+
+      if (isKeyboardVisible) {
+        document.body.classList.add('keyboard-open');
+      } else {
+        document.body.classList.remove('keyboard-open');
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
     <ConfigProvider theme={theme}>
-      <div id="app" className="app">
-        {/* Основной контент с безопасными отступами */}
+      <div id="app" className={`app ${isKeyboardOpen ? 'keyboard-open' : ''}`}>
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -47,14 +57,5 @@ function App() {
 }
 
 // Функция для получения цветов из Telegram
-const getTelegramColors = (themeParams) => ({
-  colorPrimary: themeParams?.button_color,
-  colorInfo: themeParams?.button_color,
-  colorBgBase: themeParams?.bg_color,
-  colorTextBase: themeParams?.text_color,
-  colorLink: themeParams?.link_color,
-  colorPrimaryBg: themeParams?.bg_color,
-  colorBorder: themeParams?.button_text_color,
-});
 
 export default App;
