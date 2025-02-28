@@ -62,6 +62,7 @@ const CustomTextArea = ({ placeholder }) => {
         e.stopPropagation();
         setActive(true);
       }}>
+      {keyboardHeight}
       <textarea
         ref={textareaRef}
         placeholder={placeholder || 'Введите сообщение...'}
