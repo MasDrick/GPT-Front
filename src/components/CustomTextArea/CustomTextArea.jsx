@@ -5,6 +5,7 @@ import styles from './CustomTextArea.module.scss';
 import { useAtom } from 'jotai';
 import { chatHistoryAtom } from '../../store/atoms';
 import axios from 'axios';
+import { useTelegramViewportHack } from '../../hooks/useTelegramViewportHack';
 
 const CustomTextArea = ({ placeholder }) => {
   const [active, setActive] = useState(false);
@@ -14,6 +15,9 @@ const CustomTextArea = ({ placeholder }) => {
   const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
   const { tg, queryId, urlBack } = useTelegram();
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+
+  // Хук для исправления поведения клавиатуры в iOS Telegram
+  useTelegramViewportHack(containerRef);
 
   // Функция для автоматического изменения высоты textarea
   const adjustTextareaHeight = () => {
@@ -31,20 +35,19 @@ const CustomTextArea = ({ placeholder }) => {
     }
   };
 
-  // Отслеживание кликов вне компонента
+  // Обработчики для детектирования клавиатуры
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (containerRef.current && !containerRef.current.contains(event.target)) {
-        setActive(false); // Снимаем активное состояние, если клик был вне компонента
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
+    const handleFocus = () => setIsKeyboardOpen(true);
+    const handleBlur = () => setIsKeyboardOpen(false);
+
+    textareaRef.current?.addEventListener('focus', handleFocus);
+    textareaRef.current?.addEventListener('blur', handleBlur);
+
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      textareaRef.current?.removeEventListener('focus', handleFocus);
+      textareaRef.current?.removeEventListener('blur', handleBlur);
     };
   }, []);
-
-  // Обработка изменения размера окна (для детектирования клавиатуры)
 
   // Функция для отправки сообщения
   const handleSubmit = () => {
