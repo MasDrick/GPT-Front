@@ -5,7 +5,7 @@ import styles from './CustomTextArea.module.scss';
 import { useAtom } from 'jotai';
 import { chatHistoryAtom } from '../../store/atoms';
 import axios from 'axios';
-import { useTelegramViewportHack } from '../../hooks/useTelegramViewportHack';
+import useTelegramViewportHack from '../../hooks/useTelegramViewportHack';
 
 const CustomTextArea = ({ placeholder }) => {
   const [active, setActive] = useState(false);
