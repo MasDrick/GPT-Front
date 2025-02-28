@@ -4,7 +4,15 @@ import { useTelegram } from './useTelegram';
 // Функция для проверки, что Mini App запущен на iOS
 const isTMAiOS = () => {
   const tg = window.Telegram?.WebApp;
-  return tg?.platform === 'ios';
+  const isIosTg = tg?.platform === 'ios';
+
+  console.log('[useTelegramViewportHack] Определение платформы:');
+  console.log(`  - tg.platform: ${tg?.platform}`);
+  console.log(`  - navigator.userAgent: ${navigator.userAgent}`);
+  console.log(`  - navigator.platform: ${navigator.platform}`);
+  console.log(`  - Результат: ${isIosTg ? 'iOS (TMA)' : 'Не iOS'}`);
+
+  return isIosTg;
 };
 
 const useTelegramViewportHack = (ref) => {
@@ -12,9 +20,10 @@ const useTelegramViewportHack = (ref) => {
   const { tg } = useTelegram();
 
   useEffect(() => {
-    if (!isTMAiOS()) return; // Если не iOS, ничего не делаем
+    if (!isTMAiOS()) return;
 
     const onFocusIn = () => {
+      console.log('[useTelegramViewportHack] Фокус в поле ввода (keyboard open)');
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
@@ -22,6 +31,7 @@ const useTelegramViewportHack = (ref) => {
     };
 
     const onFocusOut = () => {
+      console.log('[useTelegramViewportHack] Потеря фокуса (keyboard close)');
       setIsKeyboardOpen(false);
       document.body.style.overflow = '';
       document.body.style.position = '';
@@ -47,6 +57,7 @@ const useTelegramViewportHack = (ref) => {
     if (!isTMAiOS()) return;
 
     const onViewportChange = () => {
+      console.log('[useTelegramViewportHack] viewportChanged event');
       setIsKeyboardOpen(
         document.activeElement?.tagName === 'INPUT' ||
           document.activeElement?.tagName === 'TEXTAREA',
