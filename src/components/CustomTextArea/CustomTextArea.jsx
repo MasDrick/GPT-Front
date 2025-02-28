@@ -54,6 +54,7 @@ const CustomTextArea = ({ placeholder }) => {
     if (message.trim() !== '') {
       setChatHistory((prev) => [...prev, { type: 'user', text: message }]);
       setMessage('');
+      textarea.style.height = `40px`;
 
       axios
         .post(`${urlBack}/generate_text/?prompt=${message}&user_id=${queryId}`)

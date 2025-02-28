@@ -12,6 +12,10 @@
   box-shadow: 0 0 4px var(--tg-theme-subtitle-text-color);
 }
 
+.keyboard_open {
+  padding-bottom: 50px; /* Поднимаем контент при открытой клавиатуре */
+}
+
 .textarea {
   width: 100%; /* Ширина textarea */
   min-height: 20px; /* Минимальная высота для одной строки */
