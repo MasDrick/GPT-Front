@@ -54,7 +54,7 @@ const CustomTextArea = ({ placeholder }) => {
     <div
       ref={containerRef}
       style={{
-        paddingBottom: isKeyboardOpen ? `50px` : '0px',
+        paddingBottom: isKeyboardOpen ? `${keyboardHeight * 2}px` : '0px',
         width: '100%',
       }}
       className={`${styles.custom_textarea} ${active ? styles.active : ''}`}

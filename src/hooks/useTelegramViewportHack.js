@@ -37,29 +37,38 @@ const useTelegramViewportHack = (ref) => {
   }, [ref, onFocusIn, onFocusOut]);
 
   useEffect(() => {
-    const onViewportChange = () => {
-      console.log('viewportChanged fired');
-      const currentHeight = window.innerHeight;
-      console.log(`Initial height: ${initialHeight}, Current height: ${currentHeight}`);
+    let initialHeight = window.visualViewport?.height || window.innerHeight;
 
-      if (currentHeight < initialHeight) {
-        const newKeyboardHeight = initialHeight - currentHeight;
-        console.log(`Keyboard height detected: ${newKeyboardHeight}px`);
+    const onViewportChange = () => {
+      const currentHeight = window.visualViewport?.height || window.innerHeight;
+      const newKeyboardHeight = initialHeight - currentHeight;
+
+      console.log(
+        `initialHeight: ${initialHeight}, currentHeight: ${currentHeight}, keyboardHeight: ${newKeyboardHeight}`,
+      );
+
+      if (newKeyboardHeight > 0) {
         setIsKeyboardOpen(true);
         setKeyboardHeight(newKeyboardHeight);
       } else {
         setIsKeyboardOpen(false);
         setKeyboardHeight(0);
-        setInitialHeight(currentHeight); // Обновляем начальную высоту
       }
     };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', onViewportChange);
+    }
 
     tg.onEvent('viewportChanged', onViewportChange);
 
     return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', onViewportChange);
+      }
       tg.offEvent('viewportChanged', onViewportChange);
     };
-  }, [initialHeight]);
+  }, []);
 
   return { isKeyboardOpen, keyboardHeight };
 };
