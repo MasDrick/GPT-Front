@@ -1,37 +1,36 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
 const useTelegramViewportHack = (ref) => {
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
-  const onFocusIn = useCallback(() => {
-    setIsKeyboardOpen(true);
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-  }, []);
+  useEffect(() => {
+    const initialHeight = window.innerHeight; // Запоминаем высоту экрана без клавиатуры
 
-  const onFocusOut = useCallback(() => {
-    setIsKeyboardOpen(false);
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
-    window.scrollTo(0, 0); // Исправляет смещение контента
+    const onResize = () => {
+      const newHeight = window.innerHeight;
+      const heightDiff = initialHeight - newHeight; // Вычисляем разницу
+      if (heightDiff > 100) {
+        setKeyboardHeight(heightDiff); // Если разница значительная, клавиатура открыта
+      } else {
+        setKeyboardHeight(0); // Клавиатура закрыта
+      }
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, []);
 
   useEffect(() => {
-    const element = ref?.current;
-    if (!element) return;
-
-    element.addEventListener('focusin', onFocusIn);
-    element.addEventListener('focusout', onFocusOut);
-
-    return () => {
-      element.removeEventListener('focusin', onFocusIn);
-      element.removeEventListener('focusout', onFocusOut);
-    };
-  }, [ref, onFocusIn, onFocusOut]);
-
-  return { isKeyboardOpen };
+    if (ref.current) {
+      if (keyboardHeight > 0) {
+        ref.current.classList.add('keyboard_open');
+        ref.current.style.paddingBottom = `${keyboardHeight}px`;
+      } else {
+        ref.current.classList.remove('keyboard_open');
+        ref.current.style.paddingBottom = '0px';
+      }
+    }
+  }, [keyboardHeight, ref]);
 };
 
 export default useTelegramViewportHack;

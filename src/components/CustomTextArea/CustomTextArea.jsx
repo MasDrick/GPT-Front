@@ -76,9 +76,7 @@ const CustomTextArea = ({ placeholder }) => {
   return (
     <div
       ref={containerRef}
-      className={`${styles.custom_textarea} ${active ? styles.active : ''} ${
-        isKeyboardOpen ? styles.keyboard_open : ''
-      }`}
+      className={`${styles.custom_textarea} ${active ? styles.active : ''} `}
       onClick={(e) => {
         e.stopPropagation();
         setActive(true);
