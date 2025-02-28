@@ -13,6 +13,14 @@
   // justify-content: center;
   align-items: center;
 
+  .title {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid color-mix(in srgb, var(--tg-theme-text-color) 20%, transparent);
+  }
+
   .menuContainer {
     padding: 0px 5px;
     width: 100%;

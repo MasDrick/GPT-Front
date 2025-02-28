@@ -49,7 +49,13 @@
   bottom: 0;
   z-index: 10; /* Чтобы textarea был поверх других элементов */
 
-  padding: 10px 20px 20px 20px; /* Отступы внутри textarea */
+  padding: 10px 20px; /* Отступы внутри textarea */
+
+  p {
+    color: var(--tg-theme-hint-color);
+    text-align: right;
+    margin-top: 5px;
+  }
 }
 
 .btn {

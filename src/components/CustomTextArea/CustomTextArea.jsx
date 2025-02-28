@@ -3,7 +3,7 @@ import { useTelegram } from '../../hooks/useTelegram';
 import { Paperclip, ArrowUp } from 'lucide-react';
 import styles from './CustomTextArea.module.scss';
 import { useAtom } from 'jotai';
-import { chatHistoryAtom } from '../../store/atoms';
+import { chatHistoryAtom, activeModelAI } from '../../store/atoms';
 import axios from 'axios';
 import useTelegramViewportHack from '../../hooks/useTelegramViewportHack';
 
@@ -13,9 +13,10 @@ const CustomTextArea = ({ placeholder }) => {
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
   const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
+  const [model] = useAtom(activeModelAI);
   const { tg, queryId, urlBack } = useTelegram();
 
-  // const { isKeyboardOpen, keyboardHeight } = useTelegramViewportHack(textareaRef);
+  const { isKeyboardOpen } = useTelegramViewportHack(textareaRef);
 
   useEffect(() => {
     const adjustTextareaHeight = () => {
@@ -53,6 +54,7 @@ const CustomTextArea = ({ placeholder }) => {
   return (
     <div
       ref={containerRef}
+      style={{ marginBottom: isKeyboardOpen ? '60%' : '0' }}
       className={`${styles.custom_textarea} ${active ? styles.active : ''}`}
       onClick={(e) => {
         e.stopPropagation();
@@ -60,7 +62,7 @@ const CustomTextArea = ({ placeholder }) => {
       }}>
       <textarea
         ref={textareaRef}
-        placeholder={placeholder || 'Введите сообщение...'}
+        placeholder={placeholder || `Спросить у ${model}`}
         className={styles.textarea}
         value={message}
         onFocus={() => setActive(true)}

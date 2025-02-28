@@ -50,8 +50,8 @@ const Drawer = () => {
         animate={{ x: open ? 0 : '-100%' }}
         exit={{ x: '-100%' }}
         transition={{ type: 'spring', stiffness: 350, damping: 20 }}>
-        <div className="null">
-          <h4>Хз че сюда вставить</h4>
+        <div className={s.title}>
+          <h3>Выбор модели</h3>
         </div>
 
         <div className={s.menuContainer}>

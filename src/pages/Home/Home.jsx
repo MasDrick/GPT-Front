@@ -8,7 +8,8 @@ import CustomTextArea from '../../components/CustomTextArea/CustomTextArea';
 import Drawer from '../../components/Drawer/Drawer';
 
 import { useAtom } from 'jotai';
-import { chatHistoryAtom, isClear, openDrawer } from '../../store/atoms';
+import { chatHistoryAtom, isClear, openDrawer, activeModelAI } from '../../store/atoms';
+import useTelegramViewportHack from '../../hooks/useTelegramViewportHack';
 
 import { messages } from '../../messages';
 
@@ -21,6 +22,7 @@ const Home = () => {
   const [chatHistory] = useAtom(chatHistoryAtom);
   const [clear] = useAtom(isClear);
   const [randomMessage, setRandomMessage] = useState('');
+  const [activeModel] = useAtom(activeModelAI);
 
   useEffect(() => {
     setRandomMessage(messages[Math.floor(Math.random() * messages.length)]);
@@ -55,6 +57,8 @@ const Home = () => {
 
         <div className={s.customTextarea} style={{ position: 'relative' }}>
           <CustomTextArea />
+
+          <p>{activeModel}</p>
         </div>
       </div>
     </>
