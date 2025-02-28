@@ -53,7 +53,7 @@ const Home = () => {
           )}
         </div>
 
-        <div className={s.customTextarea}>
+        <div className={s.customTextarea} style={{ position: 'relative' }}>
           <CustomTextArea />
         </div>
       </div>

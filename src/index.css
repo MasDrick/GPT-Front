@@ -15,6 +15,11 @@
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
+body {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
 
 /* Reset and base styles  */
 * {
