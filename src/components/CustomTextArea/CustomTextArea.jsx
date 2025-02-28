@@ -7,33 +7,6 @@ import { chatHistoryAtom } from '../../store/atoms';
 import axios from 'axios';
 import useTelegramViewportHack from '../../hooks/useTelegramViewportHack';
 
-const useKeyboardHeight = () => {
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  useEffect(() => {
-    const handleViewportChange = () => {
-      const { viewportHeight, isExpanded } = window.Telegram.WebApp;
-      const screenHeight = window.innerHeight;
-      const heightDiff = screenHeight - viewportHeight;
-
-      if (!isExpanded) {
-        setKeyboardHeight(heightDiff > 0 ? heightDiff : 0);
-      } else {
-        setKeyboardHeight(0);
-      }
-    };
-
-    window.Telegram.WebApp.onEvent('viewportChanged', handleViewportChange);
-    handleViewportChange();
-
-    return () => {
-      window.Telegram.WebApp.offEvent('viewportChanged', handleViewportChange);
-    };
-  }, []);
-
-  return keyboardHeight;
-};
-
 const CustomTextArea = ({ placeholder }) => {
   const [active, setActive] = useState(false);
   const [message, setMessage] = useState('');
@@ -42,7 +15,7 @@ const CustomTextArea = ({ placeholder }) => {
   const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
   const { tg, queryId, urlBack } = useTelegram();
 
-  const keyboardHeight = useKeyboardHeight();
+  const { isKeyboardOpen } = useTelegramViewportHack(textareaRef);
 
   useEffect(() => {
     const adjustTextareaHeight = () => {
@@ -81,7 +54,7 @@ const CustomTextArea = ({ placeholder }) => {
     <div
       ref={containerRef}
       style={{
-        bottom: keyboardHeight > 0 ? `${keyboardHeight}px` : '0px',
+        bottom: isKeyboardOpen ? `${window.innerHeight / 3}px` : '0px',
         width: '100%',
       }}
       className={`${styles.custom_textarea} ${active ? styles.active : ''} `}
