@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Menu, Eraser } from 'lucide-react';
 
 import { useAtom } from 'jotai';
-import { chatHistoryAtom, isClear, openDrawer } from '../../store/atoms';
+import { chatHistoryAtom, isClear, openDrawer, activeModelAI } from '../../store/atoms';
 
 import s from './header.module.scss';
 
@@ -12,6 +12,7 @@ const Header = () => {
   const [, setClear] = useAtom(isClear);
   const [, setOpen] = useAtom(openDrawer);
   const [openModal, setOpenModal] = useState(false);
+  const [activeModel] = useAtom(activeModelAI);
 
   const onClickEraser = () => {
     if (history.length !== 0) {
@@ -27,6 +28,8 @@ const Header = () => {
   return (
     <div className={s.header}>
       <Menu onClick={() => setOpen(true)} className={s.btn} />
+
+      <h1>{activeModel}</h1>
 
       <Eraser
         className={`${s.btn} ${history.length === 0 ? s.unactive : ''}`}

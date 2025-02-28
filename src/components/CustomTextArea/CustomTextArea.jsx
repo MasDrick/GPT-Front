@@ -53,10 +53,6 @@ const CustomTextArea = ({ placeholder }) => {
   return (
     <div
       ref={containerRef}
-      style={{
-        paddingBottom: '0px',
-        width: '100%',
-      }}
       className={`${styles.custom_textarea} ${active ? styles.active : ''}`}
       onClick={(e) => {
         e.stopPropagation();

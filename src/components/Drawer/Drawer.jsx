@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { m } from 'framer-motion';
 import { useAtom } from 'jotai';
-import { openDrawer } from '../../store/atoms';
+import { openDrawer, activeModelAI } from '../../store/atoms';
 import { menuTextItems } from '../../messages';
 
 import { useTelegram } from '../../hooks/useTelegram';
@@ -12,28 +12,34 @@ import { ChevronDown } from 'lucide-react';
 
 const Drawer = () => {
   const [open, setOpen] = useAtom(openDrawer);
-
   const { tg, user } = useTelegram();
 
-  // Состояние для отслеживания развернутых пунктов меню
-  const [expandedKeys, setExpandedKeys] = useState([0]); // По умолчанию разворачиваем первый пункт
+  // Храним только один открытый пункт (по умолчанию первый)
+  const [expandedKey, setExpandedKey] = useState(0);
 
-  // Состояние для отслеживания активных моделей
-  const [activeModel, setActiveModel] = useState('1'); // По умолчанию активна модель с key: '1'
+  // Состояние активной модели
+  const [activeModel, setActiveModel] = useState('1');
+  const [currentModel, setCurrentModel] = useAtom(activeModelAI);
 
-  // Обработчик клика по пункту меню
+  // Функция очистки эмодзи из строки
+  const removeEmoji = (text) =>
+    text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').trim();
+
+  // Функция обработки выбора модели
   const handleItemClick = (child) => {
-    setActiveModel(child.key); // Обновляем активную модель
-    console.log('Selected:', child.label);
-    console.log(tg.initData);
+    setActiveModel(child.key);
+    setCurrentModel(removeEmoji(child.label));
   };
 
-  // Обработчик клика по родительскому пункту
+  // Функция переключения родительского пункта (разворачиваем только один)
   const handleToggle = (index) => {
-    setExpandedKeys((prevKeys) =>
-      prevKeys.includes(index) ? prevKeys.filter((key) => key !== index) : [...prevKeys, index],
-    );
+    setExpandedKey((prevKey) => (prevKey === index ? null : index));
   };
+
+  // Логируем актуальную модель после обновления
+  useEffect(() => {
+    console.log('Selected:', currentModel);
+  }, [currentModel]);
 
   return (
     <>
@@ -49,14 +55,14 @@ const Drawer = () => {
         </div>
 
         <div className={s.menuContainer}>
-          {/* Рендеринг меню */}
+          {/* Меню */}
           {menuTextItems.map((item, index) => (
             <div key={index} className={s.menuItem}>
               {/* Родительский пункт с анимацией */}
               <m.span
-                whileTap={{ scale: 0.95 }} // Эффект нажатия
+                whileTap={{ scale: 0.95 }}
                 onClick={() => handleToggle(index)}
-                className={`${s.menuLabel} ${expandedKeys.includes(index) ? s.active : ''}`}>
+                className={`${s.menuLabel} ${expandedKey === index ? s.active : ''}`}>
                 {item.label}
                 <ChevronDown size={20} />
               </m.span>
@@ -68,7 +74,7 @@ const Drawer = () => {
                   visible: { opacity: 1, height: 'auto' },
                 }}
                 initial="hidden"
-                animate={expandedKeys.includes(index) ? 'visible' : 'hidden'}
+                animate={expandedKey === index ? 'visible' : 'hidden'}
                 transition={{ duration: 0.3 }}
                 className={s.subMenu}>
                 {item.children.map((child) => (
@@ -84,6 +90,7 @@ const Drawer = () => {
           ))}
         </div>
 
+        {/* Блок с пользователем */}
         <section className={s.user}>
           <div className={s.userInfo}>
             <img src={user?.photo_url || '/john.jpg'} alt="avatar" className={s.avatar} />
@@ -95,7 +102,7 @@ const Drawer = () => {
         </section>
       </m.div>
 
-      {/* Фоновая затемненная область */}
+      {/* Затемнение фона при открытом меню */}
       {open && <div onClick={() => setOpen(false)} className={s.overlay}></div>}
     </>
   );

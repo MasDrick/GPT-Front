@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router';
 import { useTelegram } from './hooks/useTelegram';
+import useTelegramTheme from './hooks/useTelegramTheme';
 import Home from './pages/Home/Home';
 import Development from './pages/Develop/Development';
 import { ConfigProvider } from 'antd';
 import './App.css';
 
 function App() {
+  useTelegramTheme(); // Применяем тему Telegram
   const { tg } = useTelegram();
   const [theme, setTheme] = useState({
     token: {
