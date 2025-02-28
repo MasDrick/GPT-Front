@@ -10,14 +10,28 @@ const useTelegramViewportHack = (ref) => {
   const [initialHeight] = useState(window.visualViewport?.height || window.innerHeight);
 
   const onFocusIn = useCallback(() => {
-    setIsKeyboardOpen(true);
     document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
-  }, []);
+
+    setTimeout(() => {
+      const currentHeight = window.visualViewport?.height || window.innerHeight;
+      const newKeyboardHeight = initialHeight - currentHeight;
+
+      console.log(
+        `FOCUS IN -> initialHeight: ${initialHeight}, currentHeight: ${currentHeight}, keyboardHeight: ${newKeyboardHeight}`,
+      );
+
+      if (newKeyboardHeight > 0) {
+        setIsKeyboardOpen(true);
+        setKeyboardHeight(newKeyboardHeight);
+      }
+    }, 100); // Небольшая задержка для корректного обновления
+  }, [initialHeight]);
 
   const onFocusOut = useCallback(() => {
     setIsKeyboardOpen(false);
+    setKeyboardHeight(0);
     document.body.style.overflow = '';
     document.body.style.position = '';
     document.body.style.width = '';
@@ -44,7 +58,7 @@ const useTelegramViewportHack = (ref) => {
         const newKeyboardHeight = initialHeight - currentHeight;
 
         console.log(
-          `initialHeight: ${initialHeight}, currentHeight: ${currentHeight}, keyboardHeight: ${newKeyboardHeight}`,
+          `VIEWPORT CHANGED -> initialHeight: ${initialHeight}, currentHeight: ${currentHeight}, keyboardHeight: ${newKeyboardHeight}`,
         );
 
         if (newKeyboardHeight > 0) {
@@ -54,11 +68,12 @@ const useTelegramViewportHack = (ref) => {
           setIsKeyboardOpen(false);
           setKeyboardHeight(0);
         }
-      }, 50); // Небольшая задержка для корректного обновления
+      }, 50);
     };
 
     if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', onViewportChange);
+      window.visualViewport.addEventListener('resize', onViewportChange, { passive: true });
+      window.visualViewport.addEventListener('scroll', onViewportChange, { passive: true });
     }
 
     tg.onEvent('viewportChanged', onViewportChange);
@@ -66,31 +81,11 @@ const useTelegramViewportHack = (ref) => {
     return () => {
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', onViewportChange);
+        window.visualViewport.removeEventListener('scroll', onViewportChange);
       }
       tg.offEvent('viewportChanged', onViewportChange);
     };
-  }, []);
-
-  // 📌 Дополнительно: Исправляем редкие проблемы на iOS (не срабатывает viewportChanged)
-  useEffect(() => {
-    const onTouchStart = () => {
-      setTimeout(() => {
-        const currentHeight = window.visualViewport?.height || window.innerHeight;
-        const newKeyboardHeight = initialHeight - currentHeight;
-
-        if (newKeyboardHeight > 0) {
-          setIsKeyboardOpen(true);
-          setKeyboardHeight(newKeyboardHeight);
-        }
-      }, 50);
-    };
-
-    window.addEventListener('touchstart', onTouchStart);
-
-    return () => {
-      window.removeEventListener('touchstart', onTouchStart);
-    };
-  }, []);
+  }, [initialHeight]);
 
   return { isKeyboardOpen, keyboardHeight };
 };
