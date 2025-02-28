@@ -1,32 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const useTelegramViewportHack = (ref) => {
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
-  useEffect(() => {
-    let initialHeight = window.visualViewport?.height || window.innerHeight;
+  const onFocusIn = useCallback(() => {
+    setIsKeyboardOpen(true);
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+  }, []);
 
-    const onResize = () => {
-      const newHeight = window.visualViewport?.height || window.innerHeight;
-      const heightDiff = initialHeight - newHeight;
-
-      if (heightDiff > 20) {
-        setKeyboardHeight(heightDiff);
-      } else {
-        setKeyboardHeight(0);
-        initialHeight = newHeight; // Обновляем базовую высоту при закрытии клавиатуры
-      }
-    };
-
-    window.visualViewport?.addEventListener('resize', onResize);
-    return () => window.visualViewport?.removeEventListener('resize', onResize);
+  const onFocusOut = useCallback(() => {
+    setIsKeyboardOpen(false);
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    window.scrollTo(0, 0); // Исправляет смещение контента
   }, []);
 
   useEffect(() => {
-    if (!ref?.current) return; // Проверяем, что ref существует
+    const element = ref?.current;
+    if (!element) return;
 
-    ref.current.style.paddingBottom = keyboardHeight > 0 ? `${keyboardHeight}px` : '0px';
-  }, [keyboardHeight]);
+    element.addEventListener('focusin', onFocusIn);
+    element.addEventListener('focusout', onFocusOut);
+
+    return () => {
+      element.removeEventListener('focusin', onFocusIn);
+      element.removeEventListener('focusout', onFocusOut);
+    };
+  }, [ref, onFocusIn, onFocusOut]);
+
+  return { isKeyboardOpen };
 };
 
 export default useTelegramViewportHack;

@@ -15,7 +15,7 @@ const CustomTextArea = ({ placeholder }) => {
   const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
   const { tg, queryId, urlBack } = useTelegram();
 
-  useTelegramViewportHack(containerRef); // Фикс Telegram клавиатуры
+  const { isKeyboardOpen } = useTelegramViewportHack(textareaRef);
 
   useEffect(() => {
     const adjustTextareaHeight = () => {
@@ -53,7 +53,9 @@ const CustomTextArea = ({ placeholder }) => {
   return (
     <div
       ref={containerRef}
-      className={`${styles.custom_textarea} ${active ? styles.active : ''}`}
+      className={`${styles.custom_textarea} ${active ? styles.active : ''} ${
+        isKeyboardOpen ? styles.keyboard_open : ''
+      }`}
       onClick={(e) => {
         e.stopPropagation();
         setActive(true);
