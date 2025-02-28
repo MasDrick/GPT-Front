@@ -54,10 +54,10 @@ const useTelegramViewportHack = (ref) => {
       }
     };
 
-    telegram.WebApp.onEvent('viewportChanged', onViewportChange);
+    tg.onEvent('viewportChanged', onViewportChange);
 
     return () => {
-      telegram.WebApp.offEvent('viewportChanged', onViewportChange);
+      tg.offEvent('viewportChanged', onViewportChange);
     };
   }, [initialHeight]);
 
