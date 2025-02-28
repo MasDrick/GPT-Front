@@ -10,7 +10,7 @@ const useTelegramViewportHack = (ref) => {
       const newHeight = window.innerHeight;
       const heightDiff = initialHeight - newHeight;
 
-      if (heightDiff > 100) {
+      if (heightDiff > 20) {
         setKeyboardHeight(heightDiff);
       } else {
         setKeyboardHeight(0);

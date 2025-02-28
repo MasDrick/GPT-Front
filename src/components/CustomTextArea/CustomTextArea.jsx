@@ -74,13 +74,19 @@ const CustomTextArea = ({ placeholder }) => {
         }}
       />
       <div className={styles.buttons}>
-        <button className={styles.btn}>
-          <Paperclip size={18} />
-        </button>
         <button
-          className={`${message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`}`}
+          className={
+            tg.themeParams?.bg_color === '#ffffff' ? `${styles.btn} ${styles.isLight}` : styles.btn
+          }>
+          <Paperclip color={'#ffffff'} size={18} />
+        </button>
+
+        <button
+          className={`${message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`} ${
+            tg.themeParams?.bg_color === '#ffffff' ? styles.isLight : ''
+          }`}
           onClick={handleSubmit}>
-          <ArrowUp size={18} />
+          <ArrowUp color={'#ffffff'} size={18} />
         </button>
       </div>
     </div>
