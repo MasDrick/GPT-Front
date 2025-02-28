@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTelegram } from './useTelegram';
 
-// Надежная проверка iOS
+// Надежное определение iOS
 const isIOS = () => {
-  if (navigator.userAgentData?.platform) {
-    return navigator.userAgentData.platform === 'iOS';
-  }
+  const tgPlatform = window.Telegram?.WebApp?.platform;
+  if (tgPlatform === 'ios') return true; // Проверяем Telegram API
+
   return (
-    /iP(hone|od|ad)/i.test(navigator.userAgent) ||
-    (/Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document)
+    /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform))
   );
 };
 
@@ -16,7 +16,7 @@ const useTelegramViewportHack = (ref) => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const { tg } = useTelegram();
 
-  if (!isIOS()) return { isKeyboardOpen: false }; // Если не iOS, просто возвращаем false
+  if (!isIOS()) return { isKeyboardOpen: false }; // Если не iOS, хук не работает
 
   const onFocusIn = useCallback(() => {
     document.body.style.overflow = 'hidden';
