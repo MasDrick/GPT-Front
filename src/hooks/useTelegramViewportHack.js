@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { telegram } from '@telegram/web-app';
+import { useTelegram } from './useTelegram';
 
 const useTelegramViewportHack = (ref) => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const { tg } = useTelegram();
+
   const [initialHeight, setInitialHeight] = useState(window.innerHeight);
 
   const onFocusIn = useCallback(() => {
