@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTelegram } from './useTelegram';
 
 const useTelegramViewportHack = (ref) => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const { tg } = useTelegram();
   const onFocusIn = useCallback(() => {
     setIsKeyboardOpen(true);
     document.body.style.overflow = 'hidden';
@@ -31,7 +33,30 @@ const useTelegramViewportHack = (ref) => {
     };
   }, [ref, onFocusIn, onFocusOut]);
 
-  return { isKeyboardOpen };
+  useEffect(() => {
+    let initialHeight = window.innerHeight;
+
+    const onViewportChange = () => {
+      const currentHeight = window.innerHeight;
+      const newKeyboardHeight = initialHeight - currentHeight;
+
+      if (newKeyboardHeight > 0) {
+        setIsKeyboardOpen(true);
+        setKeyboardHeight(newKeyboardHeight);
+      } else {
+        setIsKeyboardOpen(false);
+        setKeyboardHeight(0);
+      }
+    };
+
+    tg.onEvent('viewportChanged', onViewportChange);
+
+    return () => {
+      tg.offEvent('viewportChanged', onViewportChange);
+    };
+  }, []);
+
+  return { isKeyboardOpen, keyboardHeight };
 };
 
 export default useTelegramViewportHack;
