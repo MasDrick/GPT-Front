@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useTelegram } from './useTelegram';
+import { telegram } from '@telegram/web-app';
 
 const useTelegramViewportHack = (ref) => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const { tg } = useTelegram();
+  const [initialHeight, setInitialHeight] = useState(window.innerHeight);
+
   const onFocusIn = useCallback(() => {
     setIsKeyboardOpen(true);
     document.body.style.overflow = 'hidden';
@@ -17,7 +18,7 @@ const useTelegramViewportHack = (ref) => {
     document.body.style.overflow = '';
     document.body.style.position = '';
     document.body.style.width = '';
-    window.scrollTo(0, 0); // Исправляет смещение контента
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
@@ -34,27 +35,29 @@ const useTelegramViewportHack = (ref) => {
   }, [ref, onFocusIn, onFocusOut]);
 
   useEffect(() => {
-    let initialHeight = window.innerHeight;
-
     const onViewportChange = () => {
+      console.log('viewportChanged fired');
       const currentHeight = window.innerHeight;
-      const newKeyboardHeight = initialHeight - currentHeight;
+      console.log(`Initial height: ${initialHeight}, Current height: ${currentHeight}`);
 
-      if (newKeyboardHeight > 0) {
+      if (currentHeight < initialHeight) {
+        const newKeyboardHeight = initialHeight - currentHeight;
+        console.log(`Keyboard height detected: ${newKeyboardHeight}px`);
         setIsKeyboardOpen(true);
         setKeyboardHeight(newKeyboardHeight);
       } else {
         setIsKeyboardOpen(false);
         setKeyboardHeight(0);
+        setInitialHeight(currentHeight); // Обновляем начальную высоту
       }
     };
 
-    tg.onEvent('viewportChanged', onViewportChange);
+    telegram.WebApp.onEvent('viewportChanged', onViewportChange);
 
     return () => {
-      tg.offEvent('viewportChanged', onViewportChange);
+      telegram.WebApp.offEvent('viewportChanged', onViewportChange);
     };
-  }, []);
+  }, [initialHeight]);
 
   return { isKeyboardOpen, keyboardHeight };
 };
