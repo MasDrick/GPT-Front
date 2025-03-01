@@ -1,5 +1,4 @@
 import React from 'react';
-
 import s from './ChatHistory.module.scss';
 
 const ChatHistory = ({ chatHistory }) => {
@@ -9,7 +8,11 @@ const ChatHistory = ({ chatHistory }) => {
         <div
           key={index}
           className={`${s.messageBox} ${message.type === 'user' ? s.userMessage : s.botMessage}`}>
-          <p>{message.text}</p>
+          {message.image ? (
+            <img src={message.image} alt="Изображение" className={s.messageImage} />
+          ) : (
+            <p>{message.text}</p>
+          )}
         </div>
       ))}
     </div>

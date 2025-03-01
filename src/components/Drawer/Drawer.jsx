@@ -4,6 +4,8 @@ import { useAtom } from 'jotai';
 import { openDrawer, activeModelAI } from '../../store/atoms';
 import { menuTextItems } from '../../messages';
 
+import axios from 'axios';
+
 import { useTelegram } from '../../hooks/useTelegram';
 
 import s from './drawer.module.scss';
@@ -12,7 +14,7 @@ import { ChevronDown } from 'lucide-react';
 
 const Drawer = () => {
   const [open, setOpen] = useAtom(openDrawer);
-  const { tg, user } = useTelegram();
+  const { tg, user, urlBack } = useTelegram();
 
   // Храним только один открытый пункт (по умолчанию первый)
   const [expandedKey, setExpandedKey] = useState(0);
@@ -25,10 +27,31 @@ const Drawer = () => {
   const removeEmoji = (text) =>
     text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').trim();
 
+  useEffect(() => {
+    const defaultModel = 'gpt-4o'; // Устанавливаем нужную модель
+    setCurrentModel(defaultModel);
+
+    axios
+      .post(`${urlBack}/set_model/?user_id=${user?.id}&model=${encodeURIComponent(defaultModel)}`)
+      .then(() => console.log('Модель при первом рендере установлена:', defaultModel))
+      .catch((error) => console.error('Ошибка при установке модели:', error));
+  }, []);
   // Функция обработки выбора модели
-  const handleItemClick = (child) => {
+
+  const handleItemClick = async (child) => {
+    const selectedModel = removeEmoji(child.label);
     setActiveModel(child.key);
-    setCurrentModel(removeEmoji(child.label));
+    setCurrentModel(selectedModel);
+
+    try {
+      await axios.post(
+        `${urlBack}/set_model/?user_id=${user?.id}&model=${encodeURIComponent(selectedModel)}`,
+      );
+
+      console.log('Модель успешно обновлена:', selectedModel);
+    } catch (error) {
+      console.error('Ошибка при изменении модели:', error);
+    }
   };
 
   // Функция переключения родительского пункта (разворачиваем только один)

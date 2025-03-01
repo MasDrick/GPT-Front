@@ -29,18 +29,38 @@ const CustomTextArea = ({ placeholder }) => {
     adjustTextareaHeight();
   }, [message]);
 
+  const textModels = ['gpt-4o', 'gpt-4o-mini', 'deepseek-r1', 'deepseek-v3', 'evil'];
+  const imageModels = ['midjourney', 'dall-e-3', 'flux'];
+
+  // Функция определения пути
+  const getApiUrl = (model, prompt, userId) => {
+    if (textModels.includes(model)) {
+      return `${urlBack}/generate_text/?prompt=${prompt}&user_id=${userId}`;
+    } else if (imageModels.includes(model)) {
+      return `${urlBack}/generate_image/?prompt=${prompt}&user_id=${userId}`;
+    } else {
+      throw new Error('Неизвестная модель');
+    }
+  };
+
   const handleSubmit = () => {
     if (message.trim() === '') return;
+    const apiUrl = getApiUrl(model, message, queryId);
 
     setChatHistory((prev) => [...prev, { type: 'user', text: message }]);
     setMessage('');
     textareaRef.current.style.height = 'auto';
 
     axios
-      .post(`${urlBack}/generate_text/?prompt=${message}&user_id=${queryId}`)
+      .post(apiUrl)
       .then((response) => {
         const botResponse = response.data.response;
-        setChatHistory((prev) => [...prev, { type: 'bot', text: botResponse }]);
+        const imageUrl = response.data.image_url; // Достаем картинку
+
+        setChatHistory((prev) => [
+          ...prev,
+          { type: 'bot', text: botResponse || '', image: imageUrl || '' }, // Добавляем картинку
+        ]);
       })
       .catch((error) => {
         console.error('Ошибка при получении ответа:', error);
