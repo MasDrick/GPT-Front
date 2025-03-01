@@ -54,7 +54,7 @@ const CustomTextArea = ({ placeholder }) => {
   return (
     <div
       ref={containerRef}
-      style={{ marginBottom: isKeyboardOpen ? `${keyboardHeight}px` : '0' }}
+      style={{ marginBottom: isKeyboardOpen ? `${keyboardHeight / 2}px` : '0' }}
       className={`${styles.custom_textarea} ${active ? styles.active : ''}`}
       onClick={(e) => {
         e.stopPropagation();
