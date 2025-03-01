@@ -17,6 +17,7 @@ const isTMAiOS = () => {
 
 const useTelegramViewportHack = (ref) => {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const { tg } = useTelegram();
 
   useEffect(() => {
@@ -27,12 +28,22 @@ const useTelegramViewportHack = (ref) => {
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
+
+      // Вычисляем высоту клавиатуры
+      if (tg.viewportStableHeight) {
+        const height = window.innerHeight - tg.viewportStableHeight;
+        setKeyboardHeight(height);
+        console.log(`[useTelegramViewportHack] Высота клавиатуры: ${height}px`);
+      }
+
       setIsKeyboardOpen(true);
     };
 
     const onFocusOut = () => {
       console.log('[useTelegramViewportHack] Потеря фокуса (keyboard close)');
       setIsKeyboardOpen(false);
+      setKeyboardHeight(0);
+
       document.body.style.overflow = '';
       document.body.style.position = '';
       document.body.style.width = '';
@@ -58,6 +69,13 @@ const useTelegramViewportHack = (ref) => {
 
     const onViewportChange = () => {
       console.log('[useTelegramViewportHack] viewportChanged event');
+
+      if (tg.viewportStableHeight) {
+        const height = window.innerHeight - tg.viewportStableHeight;
+        setKeyboardHeight(height);
+        console.log(`[useTelegramViewportHack] Новая высота клавиатуры: ${height}px`);
+      }
+
       setIsKeyboardOpen(
         document.activeElement?.tagName === 'INPUT' ||
           document.activeElement?.tagName === 'TEXTAREA',
@@ -71,7 +89,7 @@ const useTelegramViewportHack = (ref) => {
     };
   }, []);
 
-  return { isKeyboardOpen };
+  return { isKeyboardOpen, keyboardHeight };
 };
 
 export default useTelegramViewportHack;

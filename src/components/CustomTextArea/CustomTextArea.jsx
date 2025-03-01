@@ -16,7 +16,7 @@ const CustomTextArea = ({ placeholder }) => {
   const [model] = useAtom(activeModelAI);
   const { tg, queryId, urlBack } = useTelegram();
 
-  const { isKeyboardOpen } = useTelegramViewportHack(textareaRef);
+  const { isKeyboardOpen, keyboardHeight } = useTelegramViewportHack(textareaRef);
 
   useEffect(() => {
     const adjustTextareaHeight = () => {
@@ -54,7 +54,7 @@ const CustomTextArea = ({ placeholder }) => {
   return (
     <div
       ref={containerRef}
-      style={{ marginBottom: isKeyboardOpen ? '70%' : '0' }}
+      style={{ marginBottom: isKeyboardOpen ? `${keyboardHeight}px` : '0' }}
       className={`${styles.custom_textarea} ${active ? styles.active : ''}`}
       onClick={(e) => {
         e.stopPropagation();
