@@ -30,11 +30,6 @@ const Drawer = () => {
   useEffect(() => {
     const defaultModel = 'gpt-4o'; // Устанавливаем нужную модель
     setCurrentModel(defaultModel);
-
-    axios
-      .post(`${urlBack}/set_model/?user_id=${user?.id}&model=${encodeURIComponent(defaultModel)}`)
-      .then(() => console.log('Модель при первом рендере установлена:', defaultModel))
-      .catch((error) => console.error('Ошибка при установке модели:', error));
   }, []);
   // Функция обработки выбора модели
 
@@ -42,16 +37,6 @@ const Drawer = () => {
     const selectedModel = removeEmoji(child.label);
     setActiveModel(child.key);
     setCurrentModel(selectedModel);
-
-    try {
-      await axios.post(
-        `${urlBack}/set_model/?user_id=${user?.id}&model=${encodeURIComponent(selectedModel)}`,
-      );
-
-      console.log('Модель успешно обновлена:', selectedModel);
-    } catch (error) {
-      console.error('Ошибка при изменении модели:', error);
-    }
   };
 
   // Функция переключения родительского пункта (разворачиваем только один)
