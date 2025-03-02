@@ -44,7 +44,7 @@ const CustomTextArea = ({ placeholder }) => {
     if (textModels.includes(model)) {
       return `${urlBack}/generate_text/?prompt=${prompt}&user_id=${userId}`;
     } else if (imageModels.includes(model)) {
-      return `${urlBack}/generate_image/?prompt=${prompt}&user_id=${userId}`;
+      return `${urlBack}/generate_image/?prompt=${prompt}&user_id=undefinded`;
     } else {
       throw new Error("Неизвестная модель");
     }
