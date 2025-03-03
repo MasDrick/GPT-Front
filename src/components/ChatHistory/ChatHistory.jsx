@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Copy, RotateCw, CircleCheck, Reply } from 'lucide-react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneLight, dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+import { useTelegram } from '../../hooks/useTelegram';
 
 import s from './ChatHistory.module.scss';
 
@@ -7,24 +12,15 @@ const ChatHistory = ({ chatHistory }) => {
   const [alert, setAlert] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  const showAlert = (message) => {
-    setAlert(message); // Добавляем элемент в DOM
-    setTimeout(() => setIsVisible(true), 10); // Даем время на рендер перед анимацией
+  const { tg } = useTelegram();
 
+  const showAlert = (message) => {
+    setAlert(message);
+    setTimeout(() => setIsVisible(true), 10);
     setTimeout(() => {
       setIsVisible(false);
-      setTimeout(() => setAlert(null), 300); // Удаляем из DOM после анимации
+      setTimeout(() => setAlert(null), 300);
     }, 2000);
-  };
-
-  const handleReply = (message) => {
-    if (window.Telegram && window.Telegram.WebApp) {
-      const data = JSON.stringify({ text: message.text, image: message.image });
-      window.Telegram.WebApp.sendData(data);
-      showAlert('Сообщение отправлено!');
-    } else {
-      showAlert('Ошибка: Telegram API не доступен');
-    }
   };
 
   const handleCopy = async (message) => {
@@ -60,6 +56,13 @@ const ChatHistory = ({ chatHistory }) => {
     }
   };
 
+  const customStyle = {
+    fontSize: '14px',
+    borderRadius: '8px',
+    padding: '10px',
+    // background: '#232e3c',
+  };
+
   return (
     <div className={s.chatHistory}>
       {chatHistory.map((message, index) => (
@@ -69,20 +72,37 @@ const ChatHistory = ({ chatHistory }) => {
             {message.image ? (
               <img src={message.image} alt="Изображение" className={s.messageImage} />
             ) : (
-              <p>{message.text}</p>
+              <ReactMarkdown
+                components={{
+                  code({ inline, className, children }) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    return !inline && match ? (
+                      <SyntaxHighlighter
+                        style={tg.themeParams?.bg_color === '#ffffff' ? oneLight : dracula}
+                        language={match[1]}
+                        PreTag="div"
+                        customStyle={customStyle}>
+                        {String(children).replace(/\n$/, '')}
+                      </SyntaxHighlighter>
+                    ) : (
+                      <code className={className}>{children}</code>
+                    );
+                  },
+                }}>
+                {message.text}
+              </ReactMarkdown>
             )}
           </div>
           {message.type === 'bot' && (message.text || message.image) && (
             <div className={s.buttons}>
               <Copy className={s.btn} size={16} onClick={() => handleCopy(message)} />
               <RotateCw className={s.btn} size={16} />
-              <Reply className={s.btn} size={20} onClick={() => handleReply(message)} />
+              <Reply className={s.btn} size={20} />
             </div>
           )}
         </React.Fragment>
       ))}
 
-      {/* Уведомление без Framer Motion */}
       {alert !== null && (
         <div className={`${s.alert} ${isVisible ? s.visible : ''}`}>
           <CircleCheck size={20} className={s.icon} />
