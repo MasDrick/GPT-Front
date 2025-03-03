@@ -47,8 +47,8 @@ const Home = () => {
                 <h1>{randomMessage}</h1>
               ) : (
                 <h1>
-                  Привет, <span className={s.user}>{user?.first_name}</span> <br /> Чем я могу
-                  помочь?
+                  Привет, <span className={s.user}>{user?.first_name || 'Друг'}</span> <br /> Чем я
+                  могу помочь?
                 </h1>
               )}
             </div>

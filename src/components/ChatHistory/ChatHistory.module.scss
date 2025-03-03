@@ -1,4 +1,5 @@
 .chatHistory {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -7,7 +8,8 @@
 }
 
 .messageImage {
-  max-width: 100%;
+  width: 100%;
+  max-width: 600px;
   border-radius: 8px;
 }
 
@@ -30,6 +32,54 @@
 }
 .botMessage {
   max-width: 100%;
+  margin-bottom: 0;
   background: var(--tg-theme-bg-color); /* var(--tg-theme-bg-color); */
   color: var(--tg-theme-text-color); /*var(--tg-theme-text-color);*/
+}
+.buttons {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0px 20px 5px;
+
+  .btn {
+    opacity: 0.6;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--tg-theme-bg-color);
+  color: var(--tg-theme-text-color);
+
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  z-index: 9999;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translate(-50%, 20px);
+  transition: all 0.3s ease-in-out;
+  visibility: hidden;
+}
+
+.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  visibility: visible;
+}
+
+.icon {
+  color: #53c21b;
 }
