@@ -9,7 +9,7 @@
 
 .messageImage {
   width: 100%;
-  max-width: 600px;
+  max-width: 400px;
   border-radius: 8px;
 }
 
@@ -58,7 +58,8 @@
   transform: translateX(-50%);
   background: var(--tg-theme-bg-color);
   color: var(--tg-theme-text-color);
-
+  width: 80%;
+  max-width: 200px;
   padding: 8px 12px;
   border-radius: 8px;
   display: flex;

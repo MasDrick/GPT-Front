@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, RotateCw, CircleCheck } from 'lucide-react';
+import { Copy, RotateCw, CircleCheck, Reply } from 'lucide-react';
 
 import s from './ChatHistory.module.scss';
 
@@ -15,6 +15,16 @@ const ChatHistory = ({ chatHistory }) => {
       setIsVisible(false);
       setTimeout(() => setAlert(null), 300); // Удаляем из DOM после анимации
     }, 2000);
+  };
+
+  const handleReply = (message) => {
+    if (window.Telegram && window.Telegram.WebApp) {
+      const data = JSON.stringify({ text: message.text, image: message.image });
+      window.Telegram.WebApp.sendData(data);
+      showAlert('Сообщение отправлено!');
+    } else {
+      showAlert('Ошибка: Telegram API не доступен');
+    }
   };
 
   const handleCopy = async (message) => {
@@ -66,6 +76,7 @@ const ChatHistory = ({ chatHistory }) => {
             <div className={s.buttons}>
               <Copy className={s.btn} size={16} onClick={() => handleCopy(message)} />
               <RotateCw className={s.btn} size={16} />
+              <Reply className={s.btn} size={20} onClick={() => handleReply(message)} />
             </div>
           )}
         </React.Fragment>
