@@ -42,8 +42,31 @@
 .chatHistory {
   flex-grow: 1;
   margin-top: 80px;
-  overflow-y: auto;
+  overflow-y: scroll; /* Чтобы контент мог скроллиться, но без видимого скроллбара */
+  overflow-x: auto; /* Горизонтальный скролл должен быть виден */
+  scrollbar-width: none; /* Скрытие скроллбара в Firefox */
+
+  /* Скрытие вертикального скроллбара в WebKit-браузерах */
+  &::-webkit-scrollbar {
+    width: 0px; /* Прячем вертикальный скроллбар */
+    height: 5px; /* Оставляем горизонтальный */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--tg-theme-bg-color);
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--tg-theme-button-color);
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 }
+
 .customTextarea {
   position: sticky; /* Прилипание к низу */
   bottom: 0;

@@ -1,11 +1,17 @@
 import React from 'react';
 import reactLogo from '../../assets/react.svg';
+import { LogOut } from 'lucide-react';
+
+import { Link } from 'react-router';
 
 import './dev.scss';
 
 const Development = () => {
   return (
     <div className="container">
+      <Link to="/">
+        <LogOut className="exitIcon" />
+      </Link>
       <div className="wrap">
         <div>
           <a href="https://react.dev" target="_blank">

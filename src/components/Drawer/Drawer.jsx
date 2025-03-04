@@ -4,13 +4,15 @@ import { useAtom } from 'jotai';
 import { openDrawer, activeModelAI } from '../../store/atoms';
 import { menuTextItems } from '../../messages';
 
+import { Link } from 'react-router';
+
 import axios from 'axios';
 
 import { useTelegram } from '../../hooks/useTelegram';
 
 import s from './drawer.module.scss';
 
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, SquareArrowOutUpRight } from 'lucide-react';
 
 const Drawer = () => {
   const [open, setOpen] = useAtom(openDrawer);
@@ -96,6 +98,11 @@ const Drawer = () => {
               </m.ul>
             </div>
           ))}
+          <Link className={s.link} to="/develop">
+            <span className={s.menuLabel}>
+              Джоня <SquareArrowOutUpRight size={15} style={{ marginRight: '2px' }} />
+            </span>
+          </Link>
         </div>
 
         {/* Блок с пользователем */}

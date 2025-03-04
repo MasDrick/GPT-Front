@@ -29,15 +29,15 @@ const Home = () => {
   }, [chatHistory.length === 0]);
 
   return (
-    <>
+    <div className={s.home}>
       <div className={s.wrapper}>
         <Drawer />
-        <div className={s.header}>
-          <Header />
-        </div>
       </div>
 
       <div className={s.container}>
+        <div className={s.header}>
+          <Header />
+        </div>
         <div className={s.chatHistory}>
           {chatHistory.length !== 0 ? (
             <ChatHistory chatHistory={chatHistory} />
@@ -61,7 +61,7 @@ const Home = () => {
           <p>{activeModel}</p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

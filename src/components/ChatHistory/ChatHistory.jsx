@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Copy, RotateCw, CircleCheck, Reply } from 'lucide-react';
+import remarkGfm from 'remark-gfm';
+import { Copy, RotateCw, CircleCheck, Reply, Clipboard } from 'lucide-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneLight, dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { oneLight, oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { useTelegram } from '../../hooks/useTelegram';
 
@@ -73,17 +74,21 @@ const ChatHistory = ({ chatHistory }) => {
               <img src={message.image} alt="Изображение" className={s.messageImage} />
             ) : (
               <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
                 components={{
                   code({ inline, className, children }) {
                     const match = /language-(\w+)/.exec(className || '');
                     return !inline && match ? (
-                      <SyntaxHighlighter
-                        style={tg.themeParams?.bg_color === '#ffffff' ? oneLight : dracula}
-                        language={match[1]}
-                        PreTag="div"
-                        customStyle={customStyle}>
-                        {String(children).replace(/\n$/, '')}
-                      </SyntaxHighlighter>
+                      <div className={s.syntaxHighlighterContainer}>
+                        <Clipboard size={18} className={s.copyIcon} onClick={handleCopy} />
+                        <SyntaxHighlighter
+                          style={tg.themeParams?.bg_color === '#ffffff' ? oneLight : oneDark}
+                          language={match[1]}
+                          PreTag="div"
+                          customStyle={customStyle}>
+                          {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                      </div>
                     ) : (
                       <code className={className}>{children}</code>
                     );

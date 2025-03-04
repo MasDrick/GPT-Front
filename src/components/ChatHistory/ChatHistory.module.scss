@@ -7,6 +7,41 @@
   padding: 0px 20px;
 }
 
+h3 {
+  font-size: 24px;
+  margin: 15px 0px;
+}
+
+ol,
+ul {
+  padding-left: 20px;
+}
+strong {
+  font-size: 18px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  border-radius: 20px;
+}
+
+th,
+td {
+  border: 1px solid #99999975;
+  padding: 8px;
+  text-align: left;
+  strong {
+    font-size: 16px;
+  }
+}
+
+th {
+  background-color: var(--tg-theme-secondary-bg-color);
+  font-weight: bold;
+}
+
 .messageImage {
   width: 100%;
   max-width: 400px;
@@ -29,6 +64,13 @@
   color: white; /* Для лучшей видимости текста */
 
   margin-left: auto;
+}
+ul {
+  margin: 10px 0px;
+  li {
+    list-style-type: disc;
+    margin-bottom: 5px;
+  }
 }
 .botMessage {
   max-width: 100%;
@@ -83,4 +125,22 @@
 
 .icon {
   color: #53c21b;
+}
+
+.syntaxHighlighterContainer {
+  position: relative;
+}
+
+.copyIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: #fff;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
 }
