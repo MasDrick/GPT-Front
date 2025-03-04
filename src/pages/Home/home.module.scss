@@ -70,7 +70,7 @@
 .customTextarea {
   position: sticky; /* Прилипание к низу */
   bottom: 0;
-  z-index: 10; /* Чтобы textarea был поверх других элементов */
+  z-index: 9; /* Чтобы textarea был поверх других элементов */
 
   padding: 10px 20px; /* Отступы внутри textarea */
 

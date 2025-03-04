@@ -58,26 +58,35 @@ const ChatHistory = ({ chatHistory }) => {
         const response = await fetch(message.image);
         const blob = await response.blob();
 
-        const imageBitmap = await createImageBitmap(blob);
-        const canvas = document.createElement('canvas');
-        canvas.width = imageBitmap.width;
-        canvas.height = imageBitmap.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(imageBitmap, 0, 0);
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = async () => {
+          const base64data = reader.result;
+          const img = document.createElement('img');
+          img.src = base64data;
+          document.body.appendChild(img);
 
-        canvas.toBlob(async (pngBlob) => {
+          const range = document.createRange();
+          range.selectNode(img);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+
           try {
-            const item = new ClipboardItem({ 'image/png': pngBlob });
-            await navigator.clipboard.write([item]);
-            showAlert('Изображение скопировано!');
-          } catch (copyError) {
-            console.error('Ошибка копирования:', copyError);
-            showAlert('Ошибка копирования изображения');
+            const successful = document.execCommand('copy');
+            if (successful) {
+              showAlert('Изображение скопировано!');
+            } else {
+              showAlert('Ошибка копирования изображения');
+            }
+          } catch (err) {
+            console.error('Ошибка копирования:', err);
+            showAlert('Ошибка копирования');
           }
-        }, 'image/png');
+
+          document.body.removeChild(img);
+        };
       } else if (message.text) {
         await navigator.clipboard.writeText(message.text);
-
         showAlert('Текст скопирован!');
       }
     } catch (error) {
