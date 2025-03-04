@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-
-import { Copy, RotateCw, CircleCheck, Reply, Clipboard } from 'lucide-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight, oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+import { Copy, RotateCw, CircleCheck, Reply, Clipboard } from 'lucide-react';
+
+import { copyImageToClipboard } from 'copy-image-clipboard';
 
 import { useAtom } from 'jotai';
 import { chatHistoryAtom } from '../../store/atoms';
@@ -55,36 +57,8 @@ const ChatHistory = ({ chatHistory }) => {
   const handleCopy = async (message) => {
     try {
       if (message.image) {
-        const response = await fetch(message.image);
-        const blob = await response.blob();
-
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onloadend = async () => {
-          const base64data = reader.result;
-          const img = document.createElement('img');
-          img.src = base64data;
-          document.body.appendChild(img);
-
-          const range = document.createRange();
-          range.selectNode(img);
-          window.getSelection().removeAllRanges();
-          window.getSelection().addRange(range);
-
-          try {
-            const successful = document.execCommand('copy');
-            if (successful) {
-              showAlert('Изображение скопировано!');
-            } else {
-              showAlert('Ошибка копирования изображения');
-            }
-          } catch (err) {
-            console.error('Ошибка копирования:', err);
-            showAlert('Ошибка копирования');
-          }
-
-          document.body.removeChild(img);
-        };
+        await copyImageToClipboard(message.image); // Копируем изображение по URL
+        showAlert('Изображение скопировано!');
       } else if (message.text) {
         await navigator.clipboard.writeText(message.text);
         showAlert('Текст скопирован!');
