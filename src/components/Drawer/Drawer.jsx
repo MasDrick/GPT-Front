@@ -16,7 +16,7 @@ import { ChevronDown, SquareArrowOutUpRight } from 'lucide-react';
 
 const Drawer = () => {
   const [open, setOpen] = useAtom(openDrawer);
-  const { tg, user, urlBack } = useTelegram();
+  const { user } = useTelegram();
 
   // Храним только один открытый пункт (по умолчанию первый)
   const [expandedKey, setExpandedKey] = useState(0);

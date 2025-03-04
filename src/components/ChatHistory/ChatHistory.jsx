@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+
 import { Copy, RotateCw, CircleCheck, Reply, Clipboard } from 'lucide-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight, oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+import { useAtom } from 'jotai';
+import { chatHistoryAtom } from '../../store/atoms';
 
 import { useTelegram } from '../../hooks/useTelegram';
 
@@ -13,7 +18,30 @@ const ChatHistory = ({ chatHistory }) => {
   const [alert, setAlert] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  const [, setChatHistory] = useAtom(chatHistoryAtom);
+
   const { tg } = useTelegram();
+
+  // Загружаем историю сообщений из localStorage при монтировании компонента
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('chatHistory');
+    if (savedHistory) {
+      try {
+        const parsedHistory = JSON.parse(savedHistory);
+        setChatHistory(parsedHistory);
+      } catch (error) {
+        console.error('Ошибка парсинга истории из localStorage:', error);
+        setChatHistory([]); // Если ошибка, просто очищаем историю
+      }
+    }
+  }, [setChatHistory]); // setChatHistory в зависимостях
+
+  // Сохраняем историю в localStorage при изменении `chatHistory`
+  useEffect(() => {
+    if (chatHistory.length > 0) {
+      localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+    }
+  }, [chatHistory]);
 
   const showAlert = (message) => {
     setAlert(message);
@@ -49,12 +77,19 @@ const ChatHistory = ({ chatHistory }) => {
         }, 'image/png');
       } else if (message.text) {
         await navigator.clipboard.writeText(message.text);
+
         showAlert('Текст скопирован!');
       }
     } catch (error) {
       console.error('Ошибка копирования:', error);
       showAlert('Ошибка копирования');
     }
+  };
+
+  const handleCopyCode = (code) => {
+    navigator.clipboard.writeText(code);
+
+    showAlert('Текст скопирован!');
   };
 
   const customStyle = {
@@ -80,7 +115,11 @@ const ChatHistory = ({ chatHistory }) => {
                     const match = /language-(\w+)/.exec(className || '');
                     return !inline && match ? (
                       <div className={s.syntaxHighlighterContainer}>
-                        <Clipboard size={18} className={s.copyIcon} onClick={handleCopy} />
+                        <Clipboard
+                          size={18}
+                          className={s.copyIcon}
+                          onClick={() => handleCopyCode(children)}
+                        />
                         <SyntaxHighlighter
                           style={tg.themeParams?.bg_color === '#ffffff' ? oneLight : oneDark}
                           language={match[1]}

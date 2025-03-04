@@ -19,7 +19,7 @@ const Home = () => {
   const { user, tg } = useTelegram();
 
   const [open, setOpen] = useAtom(openDrawer);
-  const [chatHistory] = useAtom(chatHistoryAtom);
+  const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
   const [clear] = useAtom(isClear);
   const [randomMessage, setRandomMessage] = useState('');
   const [activeModel] = useAtom(activeModelAI);
@@ -40,7 +40,7 @@ const Home = () => {
         </div>
         <div className={s.chatHistory}>
           {chatHistory.length !== 0 ? (
-            <ChatHistory chatHistory={chatHistory} />
+            <ChatHistory chatHistory={chatHistory} setChatHistory={setChatHistory} />
           ) : (
             <div className={s.wrapHello}>
               {clear ? (

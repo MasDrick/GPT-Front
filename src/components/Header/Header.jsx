@@ -21,6 +21,7 @@ const Header = () => {
     setHistory([]);
     setClear(true);
     setOpenModal(false);
+    localStorage.removeItem('chatHistory'); // Удаляем из localStorage
   };
 
   return (
