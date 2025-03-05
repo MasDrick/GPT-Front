@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import LazyImage from '../LazyImage/LazyImage';
+
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -72,7 +74,7 @@ const ChatHistory = ({ chatHistory }) => {
   const handleCopyCode = (code) => {
     navigator.clipboard.writeText(code);
 
-    showAlert('Текст скопирован!');
+    showAlert('Код скопирован!');
   };
 
   const customStyle = {
@@ -89,7 +91,7 @@ const ChatHistory = ({ chatHistory }) => {
           <div
             className={`${s.messageBox} ${message.type === 'user' ? s.userMessage : s.botMessage}`}>
             {message.image ? (
-              <img src={message.image} alt="Изображение" className={s.messageImage} />
+              <LazyImage src={message.image} alt="Изображение" className={s.messageImage} />
             ) : (
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -99,7 +101,7 @@ const ChatHistory = ({ chatHistory }) => {
                     return !inline && match ? (
                       <div className={s.syntaxHighlighterContainer}>
                         <Clipboard
-                          size={18}
+                          size={26}
                           className={s.copyIcon}
                           onClick={() => handleCopyCode(children)}
                         />
