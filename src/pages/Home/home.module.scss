@@ -1,8 +1,12 @@
-.wrapper {
+.home {
   display: flex;
-  position: relative;
-  z-index: 20;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
+
 .container {
   display: flex;
   position: relative;
@@ -12,7 +16,7 @@
   max-width: 800px;
   margin: 0 auto;
 
-  height: 100vh;
+  // height: 100vh;
   background: var(--tg-theme-secondary-bg-color);
   color: var(--tg-theme-text-color);
 
@@ -42,8 +46,8 @@
 .chatHistory {
   flex-grow: 1;
   margin-top: 80px;
-  overflow-y: scroll; /* Чтобы контент мог скроллиться, но без видимого скроллбара */
-  overflow-x: auto; /* Горизонтальный скролл должен быть виден */
+  // overflow-y: scroll; /* Чтобы контент мог скроллиться, но без видимого скроллбара */
+  // overflow-x: auto; /* Горизонтальный скролл должен быть виден */
   scrollbar-width: none; /* Скрытие скроллбара в Firefox */
 
   /* Скрытие вертикального скроллбара в WebKit-браузерах */
@@ -71,7 +75,10 @@
   position: sticky; /* Прилипание к низу */
   bottom: 0;
   z-index: 9; /* Чтобы textarea был поверх других элементов */
-
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--tg-theme-secondary-bg-color);
   padding: 10px 20px; /* Отступы внутри textarea */
 
   p {

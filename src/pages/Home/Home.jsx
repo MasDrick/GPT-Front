@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { useTelegram } from '../../hooks/useTelegram';
 
@@ -33,11 +33,10 @@ const Home = () => {
       <div className={s.wrapper}>
         <Drawer />
       </div>
-
+      <div className={s.header}>
+        <Header />
+      </div>
       <div className={s.container}>
-        <div className={s.header}>
-          <Header />
-        </div>
         <div className={s.chatHistory}>
           {chatHistory.length !== 0 ? (
             <ChatHistory chatHistory={chatHistory} setChatHistory={setChatHistory} />
@@ -54,12 +53,10 @@ const Home = () => {
             </div>
           )}
         </div>
-
-        <div className={s.customTextarea} style={{ position: 'relative' }}>
-          <CustomTextArea />
-
-          <p>{activeModel}</p>
-        </div>
+      </div>
+      <div className={s.customTextarea}>
+        <CustomTextArea />
+        <p>{activeModel}</p>
       </div>
     </div>
   );
