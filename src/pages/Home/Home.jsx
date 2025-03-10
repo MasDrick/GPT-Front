@@ -8,28 +8,39 @@ import CustomTextArea from '../../components/CustomTextArea/CustomTextArea';
 import Drawer from '../../components/Drawer/Drawer';
 
 import { useAtom } from 'jotai';
-import { chatHistoryAtom, isClear, openDrawer, activeModelAI } from '../../store/atoms';
-import useTelegramViewportHack from '../../hooks/useTelegramViewportHack';
+import { chatHistoryAtom, isClear, activeModelAI } from '../../store/atoms';
+
 
 import { messages } from '../../messages';
 
 import s from './home.module.scss';
 
 const Home = () => {
-  const { user, tg } = useTelegram();
+  const { user } = useTelegram();
 
-  const [open, setOpen] = useAtom(openDrawer);
+  // const [open, setOpen] = useAtom(openDrawer);
   const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
   const [clear] = useAtom(isClear);
   const [randomMessage, setRandomMessage] = useState('');
   const [activeModel] = useAtom(activeModelAI);
 
+  const homeRef = useRef(null);
+
   useEffect(() => {
     setRandomMessage(messages[Math.floor(Math.random() * messages.length)]);
   }, [chatHistory.length === 0]);
 
-  return (
-    <div className={s.home}>
+    useEffect(() => {
+        if (homeRef.current) {
+            homeRef.current.scrollTo({
+                top: homeRef.current.scrollHeight,
+                behavior: 'smooth',
+            });
+        }
+    }, [chatHistory]);
+
+    return (
+    <div className={s.home} ref={homeRef}>
       <div className={s.wrapper}>
         <Drawer />
       </div>
