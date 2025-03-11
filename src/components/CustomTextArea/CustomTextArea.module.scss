@@ -7,6 +7,7 @@
   position: relative;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
 .active {
   border: 1px solid var(--tg-theme-bg-color);
   box-shadow: 0 0 4px var(--tg-theme-subtitle-text-color);
@@ -28,6 +29,7 @@
   outline: none;
   font-family: inherit;
   font-size: inherit;
+
   &::placeholder {
     color: #bfbfbf; /* Цвет плейсхолдера */
   }
@@ -40,8 +42,9 @@
 
 .btn {
   display: flex;
-  width: 32px;
-  height: 32px;
+  //width: 32px;
+  //height: 32px;
+  padding: 7px;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
@@ -51,9 +54,32 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
+.brainBtn {
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: absolute;
+  left: 50px;
+  bottom: 10px;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.activeBrain {
+  background-color: var(--tg-theme-button-color);
+  opacity: 1;
+}
+
 .isLight {
   background: #c0c0c0;
 }
+
 .activeBtn {
   background-color: var(--tg-theme-button-color);
   color: #fff;

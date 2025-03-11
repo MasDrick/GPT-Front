@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import {useState, useEffect, useRef} from 'react';
 
-import { useTelegram } from '../../hooks/useTelegram';
+import {useTelegram} from '../../hooks/useTelegram';
 
 import Header from '../../components/Header/Header';
 import ChatHistory from '../../components/ChatHistory/ChatHistory';
@@ -8,7 +8,7 @@ import CustomTextArea from '../../components/CustomTextArea/CustomTextArea';
 import Drawer from '../../components/Drawer/Drawer';
 
 
-import { messages } from '../../messages';
+import {messages} from '../../messages';
 
 import s from './home.module.scss';
 import {useDispatch, useSelector} from "react-redux";
@@ -16,7 +16,7 @@ import {setChatHistory} from "../../slices/chatHistorySlice.js";
 
 
 const Home = () => {
-  const { user } = useTelegram();
+  const {user} = useTelegram();
 
   const chatHistory = useSelector(state => state.chatHistory.chatHistory);
 
@@ -35,7 +35,6 @@ const Home = () => {
     if (savedHistory) {
       try {
         const parsedHistory = JSON.parse(savedHistory);
-        console.log('Загруженная история из localStorage:', parsedHistory);
         dispatch(setChatHistory(parsedHistory));
       } catch (error) {
         console.error('Ошибка парсинга истории из localStorage:', error);
@@ -48,35 +47,35 @@ const Home = () => {
     setRandomMessage(messages[Math.floor(Math.random() * messages.length)]);
   }, [chatHistory.length === 0]);
 
-    useEffect(() => {
-        if (homeRef.current) {
-            homeRef.current.scrollTo({
-                top: homeRef.current.scrollHeight,
-                behavior: 'smooth',
-            });
-        }
-    }, [chatHistory]);
+  useEffect(() => {
+    if (homeRef.current) {
+      homeRef.current.scrollTo({
+        top: homeRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [chatHistory]);
 
-    return (
+  return (
     <div className={s.home} ref={homeRef}>
       <div className={s.wrapper}>
-        <Drawer />
+        <Drawer/>
       </div>
       <div className={s.header}>
-        <Header />
+        <Header/>
       </div>
 
       <div className={s.container}>
         <div className={s.chatHistory}>
           {chatHistory.length !== 0 ? (
-            <ChatHistory />
+            <ChatHistory/>
           ) : (
             <div className={s.wrapHello}>
               {clear ? (
                 <h1>{randomMessage}</h1>
               ) : (
                 <h1>
-                  Привет, <span className={s.user}>{user?.first_name || 'Друг'}</span> <br /> Чем я
+                  Привет, <span className={s.user}>{user?.first_name || 'Друг'}</span> <br/> Чем я
                   могу помочь?
                 </h1>
               )}
@@ -85,7 +84,7 @@ const Home = () => {
         </div>
       </div>
       <div className={s.customTextarea}>
-        <CustomTextArea />
+        <CustomTextArea/>
         <p>{activeModel}</p>
       </div>
     </div>

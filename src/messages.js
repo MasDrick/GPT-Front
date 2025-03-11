@@ -29,28 +29,30 @@ export const menuTextItems = [
   {
     label: 'Текст 📝', // Эмодзи для текстовых моделей
     children: [
-      { key: '1', label: 'gpt-4o 🤖' }, // Эмодзи для конкретной модели
-      { key: '2', label: 'gpt-4o-mini 💡' },
-      { key: '3', label: 'deepseek-r1 🧠' },
-      { key: '4', label: 'deepseek-v3 🚀' },
-      { key: '5', label: 'evil 👿' },
+      {key: '1', label: 'gpt-4o 🤖'}, // Эмодзи для конкретной модели
+      {key: '2', label: 'gpt-4o-mini 💡'},
+      {key: '3', label: 'deepseek-r1 🧠'},
+      {key: '4', label: 'deepseek-v3 🚀'},
+      {key: '5', label: 'evil 👿'},
     ],
   },
   {
     label: 'Изображения', // Эмодзи для генерации изображений
     children: [
-      { key: '6', label: 'midjourney 🎨' },
-      { key: '7', label: 'dall-e-3 🌈' },
-      { key: '8', label: 'flux 🌀' },
+      {key: '6', label: 'midjourney 🎨'},
+      {key: '7', label: 'dall-e-3 🌈'},
+      {key: '8', label: 'flux 🌀'},
     ],
   },
   {
     label: 'Мини-игры', // Эмодзи для генерации изображений
     children: [
-      { key: '9', label: 'Google Dino 🦖' },
-      { key: '10', label: 'Flappy Bird 🦜' },
+      {key: '9', label: 'Google Dino 🦖'},
+      {key: '10', label: 'Flappy Bird 🦜'},
     ],
   },
 ];
+
+export const imagesMenuItem = menuTextItems.find(item => item.label === 'Изображения');
 
 

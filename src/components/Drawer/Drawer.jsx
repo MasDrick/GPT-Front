@@ -1,24 +1,24 @@
-import  { useState, useEffect } from 'react';
-import { m } from 'framer-motion';
+import {useState, useEffect} from 'react';
+import {m} from 'framer-motion';
 
-import { menuTextItems } from '../../messages';
+import {menuTextItems} from '../../messages';
 
-import { Link } from 'react-router';
+import {Link} from 'react-router';
 
 
-import { useTelegram } from '../../hooks/useTelegram';
+import {useTelegram} from '../../hooks/useTelegram';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentModel } from '../../slices/activeModelSlice.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {setCurrentModel} from '../../slices/activeModelSlice.js';
 
 import s from './drawer.module.scss';
 
-import { ChevronDown, SquareArrowOutUpRight } from 'lucide-react';
+import {ChevronDown, SquareArrowOutUpRight} from 'lucide-react';
 import {setOpenDrawer} from "../../slices/headerSlice.js";
 
 const Drawer = () => {
-  // const [open, setOpen] = useAtom(openDrawer);
-  const { user } = useTelegram();
+
+  const {user} = useTelegram();
 
   const dispatch = useDispatch();
 
@@ -40,8 +40,9 @@ const Drawer = () => {
   // Функция обработки выбора модели
 
   const handleItemClick = async (child) => {
-    const selectedModel = removeEmoji(child.label);
     setActiveModel(child.key);
+    const selectedModel = removeEmoji(child.label);
+
     dispatch(setCurrentModel(selectedModel));
   };
 
@@ -49,21 +50,16 @@ const Drawer = () => {
   const handleToggle = (index) => {
     setExpandedKey((prevKey) => (prevKey === index ? null : index));
   };
-
-  // Логируем актуальную модель после обновления
-  useEffect(() => {
-    console.log('Selected:', currentModel);
-  }, [currentModel]);
-
+  
   return (
     <>
       {/* Боковая панель */}
       <m.div
         className={s.drawer}
-        initial={{ x: '-100%' }}
-        animate={{ x: openDrawer ? 0 : '-100%' }}
-        exit={{ x: '-100%' }}
-        transition={{ type: 'spring', stiffness: 350, damping: 20 }}>
+        initial={{x: '-100%'}}
+        animate={{x: openDrawer ? 0 : '-100%'}}
+        exit={{x: '-100%'}}
+        transition={{type: 'spring', stiffness: 350, damping: 20}}>
         <div className={s.title}>
           <h3>Выбор модели</h3>
         </div>
@@ -74,22 +70,22 @@ const Drawer = () => {
             <div key={index} className={s.menuItem}>
               {/* Родительский пункт с анимацией */}
               <m.span
-                whileTap={{ scale: 0.95 }}
+                whileTap={{scale: 0.95}}
                 onClick={() => handleToggle(index)}
                 className={`${s.menuLabel} ${expandedKey === index ? s.active : ''}`}>
                 {item.label}
-                <ChevronDown size={20} />
+                <ChevronDown size={20}/>
               </m.span>
 
               {/* Подменю с анимацией */}
               <m.ul
                 variants={{
-                  hidden: { opacity: 0, height: 0 },
-                  visible: { opacity: 1, height: 'auto' },
+                  hidden: {opacity: 0, height: 0},
+                  visible: {opacity: 1, height: 'auto'},
                 }}
                 initial="hidden"
                 animate={expandedKey === index ? 'visible' : 'hidden'}
-                transition={{ duration: 0.3 }}
+                transition={{duration: 0.3}}
                 className={s.subMenu}>
                 {item.children.map((child) => (
                   <li
@@ -104,7 +100,7 @@ const Drawer = () => {
           ))}
           <Link className={s.link} to="/develop">
             <span className={s.menuLabel}>
-              Джоня <SquareArrowOutUpRight size={15} style={{ marginRight: '2px' }} />
+              Джоня <SquareArrowOutUpRight size={15} style={{marginRight: '2px'}}/>
             </span>
           </Link>
         </div>
@@ -112,7 +108,7 @@ const Drawer = () => {
         {/* Блок с пользователем */}
         <section className={s.user}>
           <div className={s.userInfo}>
-            <img src={user?.photo_url || '/john.jpg'} alt="avatar" className={s.avatar} />
+            <img src={user?.photo_url || '/john.jpg'} alt="avatar" className={s.avatar}/>
             <div className={s.names}>
               <h4>{user?.first_name || 'firstName'}</h4>
               <p>@{user?.username || 'username'} </p>
