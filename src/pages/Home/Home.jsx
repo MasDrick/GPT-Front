@@ -58,35 +58,43 @@ const Home = () => {
 
   return (
     <div className={s.home} ref={homeRef}>
-      <div className={s.wrapper}>
+      <div className={s.drower}>
         <Drawer/>
       </div>
+
       <div className={s.header}>
         <Header/>
       </div>
 
-      <div className={s.container}>
-        <div className={s.chatHistory}>
-          {chatHistory.length !== 0 ? (
-            <ChatHistory/>
-          ) : (
-            <div className={s.wrapHello}>
-              {clear ? (
-                <h1>{randomMessage}</h1>
-              ) : (
-                <h1>
-                  Привет, <span className={s.user}>{user?.first_name || 'Друг'}</span> <br/> Чем я
-                  могу помочь?
-                </h1>
-              )}
-            </div>
-          )}
+      <div className={s.wrapper}>
+
+        <div className="drower"></div>
+
+        <div className={s.container}>
+          <div className={s.chatHistory}>
+            {chatHistory.length !== 0 ? (
+              <ChatHistory/>
+            ) : (
+              <div className={s.wrapHello}>
+                {clear ? (
+                  <h1>{randomMessage}</h1>
+                ) : (
+                  <h1>
+                    Привет, <span className={s.user}>{user?.first_name || 'Друг'}</span> <br/> Чем я
+                    могу помочь?
+                  </h1>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className={s.customTextarea}>
+          <CustomTextArea/>
+          <p>{activeModel}</p>
         </div>
       </div>
-      <div className={s.customTextarea}>
-        <CustomTextArea/>
-        <p>{activeModel}</p>
-      </div>
+
+
     </div>
   );
 };

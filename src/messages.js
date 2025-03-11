@@ -44,13 +44,7 @@ export const menuTextItems = [
       {key: '8', label: 'flux 🌀'},
     ],
   },
-  {
-    label: 'Мини-игры', // Эмодзи для генерации изображений
-    children: [
-      {key: '9', label: 'Google Dino 🦖'},
-      {key: '10', label: 'Flappy Bird 🦜'},
-    ],
-  },
+  
 ];
 
 export const imagesMenuItem = menuTextItems.find(item => item.label === 'Изображения');

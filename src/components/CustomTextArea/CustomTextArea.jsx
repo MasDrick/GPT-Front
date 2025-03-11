@@ -65,12 +65,6 @@ const CustomTextArea = () => {
     }
   };
 
-
-  const focusIOS = () => {
-    textareaRef.current.focus();
-  }
-
-
   return (
     <div
       ref={containerRef}
@@ -81,7 +75,6 @@ const CustomTextArea = () => {
       onClick={(e) => {
         e.stopPropagation();
         setActive(true);
-        focusIOS()
       }}>
         <textarea
           ref={textareaRef}

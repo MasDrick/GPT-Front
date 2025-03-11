@@ -1,5 +1,7 @@
+
 .drawer {
   position: absolute;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   width: 50%;
   max-width: 330px;
   min-width: 190px;
@@ -15,15 +17,16 @@
 
   .title {
     width: 100%;
-    max-width: 280px;
     text-align: center;
     padding: 20px;
     border-bottom: 1px solid color-mix(in srgb, var(--tg-theme-text-color) 20%, transparent);
+
     h3 {
       font-size: 20px;
       margin: 0;
     }
   }
+
   .link {
     color: var(--tg-theme-text-color);
   }
@@ -35,6 +38,7 @@
     max-width: 280px;
     background: var(--tg-theme-secondary-bg-color);
   }
+
   .menuLabel {
     display: flex !important;
     justify-content: space-between;
@@ -54,6 +58,7 @@
       opacity: 1;
     }
   }
+
   .menuItem {
     // margin-bottom: 16px;
 
@@ -62,8 +67,8 @@
       // background: var(--tg-theme-button_color);
 
       svg {
-        transform: rotateX(0deg); // Начальное положение
-        transform: rotateX(180deg); // Поворот на 180 градусов
+
+        transform: rotate(180deg); // Поворот на 180 градусов
       }
     }
 
@@ -102,7 +107,7 @@
 }
 
 .overlay {
-  position: fixed;
+  //position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -110,11 +115,16 @@
   background: rgba(0, 0, 0, 0.6); // Полупрозрачный черный фон
   z-index: 999; // Нужно, чтобы был ниже Drawer
   cursor: pointer;
+
+  @media(max-width: 1200px) {
+    position: fixed;
+  }
 }
+
 .user {
   border-top: 1px solid color-mix(in srgb, var(--tg-theme-text-color) 20%, transparent);
   width: 100%;
-  max-width: 280px;
+
   padding: 10px 5px;
 
   .userInfo {
@@ -122,6 +132,7 @@
     align-items: center;
     gap: 10px;
     width: 100%;
+    max-width: 280px;
     margin: 0 auto;
     text-align: center;
 

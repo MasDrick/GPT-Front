@@ -1,15 +1,19 @@
-import { useState, useEffect } from 'react';
-import { Route, Routes } from 'react-router';
-import { useTelegram } from './hooks/useTelegram';
+import {useState, useEffect} from 'react';
+import {Route, Routes} from 'react-router';
+import {useTelegram} from './hooks/useTelegram';
 import useTelegramTheme from './hooks/useTelegramTheme';
 import Home from './pages/Home/Home';
 import Development from './pages/Develop/Development';
-import { ConfigProvider } from 'antd';
+import {ConfigProvider} from 'antd';
+
+import {useWindowSize} from "./hooks/useWindowSize.js";
+
 import './App.css';
 
 function App() {
   useTelegramTheme(); // Применяем тему Telegram
-  const { tg } = useTelegram();
+  useWindowSize();
+  const {tg} = useTelegram();
   const [theme, setTheme] = useState({
     token: {
       colorPrimary: tg.themeParams?.button_color,
@@ -45,8 +49,8 @@ function App() {
   return (
     <ConfigProvider theme={theme}>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/develop" element={<Development />} />
+        <Route path="/" element={<Home/>}/>
+        <Route path="/develop" element={<Development/>}/>
       </Routes>
     </ConfigProvider>
   );

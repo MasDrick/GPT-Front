@@ -50,7 +50,7 @@ const Drawer = () => {
   const handleToggle = (index) => {
     setExpandedKey((prevKey) => (prevKey === index ? null : index));
   };
-  
+
   return (
     <>
       {/* Боковая панель */}
@@ -100,7 +100,12 @@ const Drawer = () => {
           ))}
           <Link className={s.link} to="/develop">
             <span className={s.menuLabel}>
-              Джоня <SquareArrowOutUpRight size={15} style={{marginRight: '2px'}}/>
+              Google Dino 🦖 <SquareArrowOutUpRight size={15} style={{marginRight: '2px'}}/>
+            </span>
+          </Link>
+          <Link className={s.link} to="/develop">
+            <span className={s.menuLabel}>
+              Flappy Bird 🦜 <SquareArrowOutUpRight size={15} style={{marginRight: '2px'}}/>
             </span>
           </Link>
         </div>
