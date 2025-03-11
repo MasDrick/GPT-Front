@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from "../slices/counterSlice.js";
-import activeModelReducer from "../slices/activemodelSlice.js";
+import activeModelReducer from "../slices/activeModelSlice.js";
 import headerSlice from "../slices/headerSlice.js";
 import chatHistorySlice from "../slices/chatHistorySlice.js";
 

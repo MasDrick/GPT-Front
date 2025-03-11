@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-const modelSlice = createSlice({
+const activeModelSlice = createSlice({
     name: 'model',
     initialState: {
         currentModel: 'gpt-4o',
@@ -12,5 +12,5 @@ const modelSlice = createSlice({
     },
 });
 
-export const { setCurrentModel } = modelSlice.actions;
-export default modelSlice.reducer;
+export const { setCurrentModel } = activeModelSlice.actions;
+export default activeModelSlice.reducer;
