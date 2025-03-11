@@ -1,44 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { m } from 'framer-motion';
-import { useAtom } from 'jotai';
-import { openDrawer, activeModelAI } from '../../store/atoms';
+
 import { menuTextItems } from '../../messages';
 
 import { Link } from 'react-router';
 
-import axios from 'axios';
 
 import { useTelegram } from '../../hooks/useTelegram';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentModel } from '../../slices/activeModelSlice.js';
 
 import s from './drawer.module.scss';
 
 import { ChevronDown, SquareArrowOutUpRight } from 'lucide-react';
+import {setOpenDrawer} from "../../slices/headerSlice.js";
 
 const Drawer = () => {
-  const [open, setOpen] = useAtom(openDrawer);
+  // const [open, setOpen] = useAtom(openDrawer);
   const { user } = useTelegram();
+
+  const dispatch = useDispatch();
+
+  const currentModel = useSelector((state) => state.activeModel.currentModel);
+  const openDrawer = useSelector((state) => state.headerSlice.open)
 
   // Храним только один открытый пункт (по умолчанию первый)
   const [expandedKey, setExpandedKey] = useState(0);
 
   // Состояние активной модели
   const [activeModel, setActiveModel] = useState('1');
-  const [currentModel, setCurrentModel] = useAtom(activeModelAI);
+
 
   // Функция очистки эмодзи из строки
   const removeEmoji = (text) =>
     text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '').trim();
 
-  useEffect(() => {
-    const defaultModel = 'gpt-4o'; // Устанавливаем нужную модель
-    setCurrentModel(defaultModel);
-  }, []);
+
   // Функция обработки выбора модели
 
   const handleItemClick = async (child) => {
     const selectedModel = removeEmoji(child.label);
     setActiveModel(child.key);
-    setCurrentModel(selectedModel);
+    dispatch(setCurrentModel(selectedModel));
   };
 
   // Функция переключения родительского пункта (разворачиваем только один)
@@ -57,7 +61,7 @@ const Drawer = () => {
       <m.div
         className={s.drawer}
         initial={{ x: '-100%' }}
-        animate={{ x: open ? 0 : '-100%' }}
+        animate={{ x: openDrawer ? 0 : '-100%' }}
         exit={{ x: '-100%' }}
         transition={{ type: 'spring', stiffness: 350, damping: 20 }}>
         <div className={s.title}>
@@ -118,7 +122,7 @@ const Drawer = () => {
       </m.div>
 
       {/* Затемнение фона при открытом меню */}
-      {open && <div onClick={() => setOpen(false)} className={s.overlay}></div>}
+      {openDrawer && <div onClick={() => dispatch(setOpenDrawer(false))} className={s.overlay}></div>}
     </>
   );
 };

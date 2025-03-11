@@ -1,32 +1,41 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Menu, Eraser } from 'lucide-react';
-import { useAtom } from 'jotai';
+
 import { m, AnimatePresence } from 'framer-motion'; // 🎯 Импорт анимации
 
-import { chatHistoryAtom, isClear, openDrawer } from '../../store/atoms';
+
 import s from './header.module.scss';
+import {useDispatch, useSelector} from "react-redux";
+import {setOpenDrawer, setClearChat} from "../../slices/headerSlice.js";
+import {setChatHistory} from "../../slices/chatHistorySlice.js";
 
 const Header = () => {
-  const [history, setHistory] = useAtom(chatHistoryAtom);
-  const [, setClear] = useAtom(isClear);
-  const [, setOpen] = useAtom(openDrawer);
+
   const [openModal, setOpenModal] = useState(false);
+
+  const history = useSelector((state) => state.chatHistory.chatHistory);
+
+  const dispatch = useDispatch();
 
   const onClickEraser = () => {
     if (history.length !== 0) {
       setOpenModal(true);
     }
   };
+
+
   const clearHistory = () => {
-    setHistory([]);
-    setClear(true);
+    dispatch(setChatHistory([]));
+      // setHistory([]);
+    dispatch(setClearChat(true));
     setOpenModal(false);
+
     localStorage.removeItem('chatHistory'); // Удаляем из localStorage
   };
 
   return (
     <div className={s.header}>
-      <Menu onClick={() => setOpen(true)} className={s.btn} />
+      <Menu onClick={() => dispatch(setOpenDrawer(true))} className={s.btn} />
 
       <Eraser
         className={`${s.btn} ${history.length === 0 ? s.unactive : ''}`}

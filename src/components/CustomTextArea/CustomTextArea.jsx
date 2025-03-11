@@ -1,20 +1,24 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useTelegram } from '../../hooks/useTelegram';
 import { Paperclip, ArrowUp } from 'lucide-react';
 import styles from './CustomTextArea.module.scss';
-import { useAtom } from 'jotai';
-import { chatHistoryAtom, activeModelAI } from '../../store/atoms';
 import axios from 'axios';
 import useTelegramViewportHack from '../../hooks/useTelegramViewportHack';
 
-const CustomTextArea = ({ placeholder }) => {
+import {useDispatch, useSelector} from "react-redux";
+
+import {addMessage} from "../../slices/chatHistorySlice.js";
+
+const CustomTextArea = () => {
   const [active, setActive] = useState(false);
   const [message, setMessage] = useState('');
   const containerRef = useRef(null);
   const textareaRef = useRef(null);
-  const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
-  const [model] = useAtom(activeModelAI);
-  const { tg, queryId, urlBack } = useTelegram();
+  const { tg, urlBack } = useTelegram();
+
+  const dispatch = useDispatch();
+
+  const model = useSelector(state => state.activeModel.currentModel);
 
   const { isKeyboardOpen, keyboardHeight } = useTelegramViewportHack(textareaRef);
 
@@ -36,7 +40,7 @@ const CustomTextArea = ({ placeholder }) => {
     const apiUrl = `${urlBack}/generate/?prompt=${encodeURIComponent(message)}&model=${model}`;
 
     // Добавляем сообщение пользователя в чат
-    setChatHistory((prev) => [...prev, { type: 'user', text: message }]);
+    dispatch(addMessage({ type: 'user', text: message }));
     setMessage('');
     textareaRef.current.style.height = 'auto';
 
@@ -46,19 +50,14 @@ const CustomTextArea = ({ placeholder }) => {
       const { response: botResponse, image_url: imageUrl } = response.data;
 
       // Добавляем ответ бота в чат
-      setChatHistory((prev) => [
-        ...prev,
-        { type: 'bot', text: botResponse || '', image: imageUrl || '' },
-      ]);
+      dispatch(addMessage({ type: 'bot', text: botResponse || '', image: imageUrl || '' }));
     } catch (error) {
       console.error('Ошибка при получении ответа:', error);
-      setChatHistory((prev) => [
-        ...prev,
-        {
-          type: 'bot',
-          text: 'Произошла ошибка. Пожалуйста, попробуйте позже.',
-        },
-      ]);
+      dispatch(addMessage({
+        type: 'bot',
+        text: 'Произошла ошибка. Пожалуйста, попробуйте позже.',
+      },));
+
     }
   };
 
@@ -75,7 +74,7 @@ const CustomTextArea = ({ placeholder }) => {
       }}>
       <textarea
         ref={textareaRef}
-        placeholder={placeholder || `Спросить у ${model}`}
+        placeholder={`Спросить у ${model}`}
         className={styles.textarea}
         value={message}
         onFocus={() => setActive(true)}

@@ -11,34 +11,21 @@ import { Copy, RotateCw, CircleCheck, Reply, Clipboard } from 'lucide-react';
 
 import { copyImageToClipboard } from 'copy-image-clipboard';
 
-import { useAtom } from 'jotai';
-import { chatHistoryAtom } from '../../store/atoms';
 
 import { useTelegram } from '../../hooks/useTelegram';
 
 import s from './ChatHistory.module.scss';
+import {useSelector} from "react-redux";
 
-const ChatHistory = ({ chatHistory }) => {
+
+const ChatHistory = () => {
   const [alert, setAlert] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  const [, setChatHistory] = useAtom(chatHistoryAtom);
-
   const { tg } = useTelegram();
 
-  // Загружаем историю сообщений из localStorage при монтировании компонента
-  useEffect(() => {
-    const savedHistory = localStorage.getItem('chatHistory');
-    if (savedHistory) {
-      try {
-        const parsedHistory = JSON.parse(savedHistory);
-        setChatHistory(parsedHistory);
-      } catch (error) {
-        console.error('Ошибка парсинга истории из localStorage:', error);
-        setChatHistory([]); // Если ошибка, просто очищаем историю
-      }
-    }
-  }, [setChatHistory]); // setChatHistory в зависимостях
+  const chatHistory = useSelector(state => state.chatHistory.chatHistory);
+
 
   // Сохраняем историю в localStorage при изменении `chatHistory`
   useEffect(() => {

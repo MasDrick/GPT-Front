@@ -7,24 +7,42 @@ import ChatHistory from '../../components/ChatHistory/ChatHistory';
 import CustomTextArea from '../../components/CustomTextArea/CustomTextArea';
 import Drawer from '../../components/Drawer/Drawer';
 
-import { useAtom } from 'jotai';
-import { chatHistoryAtom, isClear, activeModelAI } from '../../store/atoms';
-
 
 import { messages } from '../../messages';
 
 import s from './home.module.scss';
+import {useDispatch, useSelector} from "react-redux";
+import {setChatHistory} from "../../slices/chatHistorySlice.js";
+
 
 const Home = () => {
   const { user } = useTelegram();
 
-  // const [open, setOpen] = useAtom(openDrawer);
-  const [chatHistory, setChatHistory] = useAtom(chatHistoryAtom);
-  const [clear] = useAtom(isClear);
+  const chatHistory = useSelector(state => state.chatHistory.chatHistory);
+
+  const dispatch = useDispatch();
+
+  const clear = useSelector(state => state.headerSlice.clearChat);
+
   const [randomMessage, setRandomMessage] = useState('');
-  const [activeModel] = useAtom(activeModelAI);
+  const activeModel = useSelector(state => state.activeModel.currentModel);
 
   const homeRef = useRef(null);
+
+
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('chatHistory');
+    if (savedHistory) {
+      try {
+        const parsedHistory = JSON.parse(savedHistory);
+        console.log('Загруженная история из localStorage:', parsedHistory);
+        dispatch(setChatHistory(parsedHistory));
+      } catch (error) {
+        console.error('Ошибка парсинга истории из localStorage:', error);
+        dispatch(setChatHistory([]));
+      }
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     setRandomMessage(messages[Math.floor(Math.random() * messages.length)]);
@@ -47,10 +65,11 @@ const Home = () => {
       <div className={s.header}>
         <Header />
       </div>
+
       <div className={s.container}>
         <div className={s.chatHistory}>
           {chatHistory.length !== 0 ? (
-            <ChatHistory chatHistory={chatHistory} setChatHistory={setChatHistory} />
+            <ChatHistory />
           ) : (
             <div className={s.wrapHello}>
               {clear ? (
