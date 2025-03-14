@@ -5,9 +5,8 @@
 }
 
 .drower {
-
   width: 330px;
-  @media(max-width: 1200px) {
+  @media (max-width: 1200px) {
     width: 0;
   }
 }
@@ -23,7 +22,7 @@
 
   margin-left: calc(100vw * 0.16);
 
-  @media(max-width: 1700px) {
+  @media (max-width: 1700px) {
     margin: 0 auto;
   }
 }
@@ -36,7 +35,6 @@
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-
 
   // height: 100vh;
   background: var(--tg-theme-secondary-bg-color);
@@ -71,7 +69,7 @@
 
 .chatHistory {
   flex-grow: 1;
-  margin-top: 80px;
+  // height: 100vh;
   // overflow-y: scroll; /* Чтобы контент мог скроллиться, но без видимого скроллбара */
   // overflow-x: auto; /* Горизонтальный скролл должен быть виден */
   scrollbar-width: none; /* Скрытие скроллбара в Firefox */

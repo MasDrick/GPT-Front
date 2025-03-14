@@ -1,34 +1,31 @@
-import {useState, useEffect, useRef} from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-import {useTelegram} from '../../hooks/useTelegram';
+import { useTelegram } from '../../hooks/useTelegram';
 
 import Header from '../../components/Header/Header';
 import ChatHistory from '../../components/ChatHistory/ChatHistory';
 import CustomTextArea from '../../components/CustomTextArea/CustomTextArea';
 import Drawer from '../../components/Drawer/Drawer';
 
-
-import {messages} from '../../messages';
+import { messages } from '../../messages';
 
 import s from './home.module.scss';
-import {useDispatch, useSelector} from "react-redux";
-import {setChatHistory} from "../../slices/chatHistorySlice.js";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setChatHistory } from '../../slices/chatHistorySlice.js';
 
 const Home = () => {
-  const {user} = useTelegram();
+  const { user } = useTelegram();
 
-  const chatHistory = useSelector(state => state.chatHistory.chatHistory);
+  const chatHistory = useSelector((state) => state.chatHistory.chatHistory);
 
   const dispatch = useDispatch();
 
-  const clear = useSelector(state => state.headerSlice.clearChat);
+  const clear = useSelector((state) => state.headerSlice.clearChat);
 
   const [randomMessage, setRandomMessage] = useState('');
-  const activeModel = useSelector(state => state.activeModel.currentModel);
+  const activeModel = useSelector((state) => state.activeModel.currentModel);
 
   const homeRef = useRef(null);
-
 
   useEffect(() => {
     const savedHistory = localStorage.getItem('chatHistory');
@@ -59,29 +56,28 @@ const Home = () => {
   return (
     <div className={s.home} ref={homeRef}>
       <div className={s.drower}>
-        <Drawer/>
+        <Drawer />
       </div>
 
       <div className={s.header}>
-        <Header/>
+        <Header />
       </div>
 
       <div className={s.wrapper}>
-
         <div className="drower"></div>
 
         <div className={s.container}>
           <div className={s.chatHistory}>
             {chatHistory.length !== 0 ? (
-              <ChatHistory/>
+              <ChatHistory />
             ) : (
               <div className={s.wrapHello}>
                 {clear ? (
                   <h1>{randomMessage}</h1>
                 ) : (
                   <h1>
-                    Привет, <span className={s.user}>{user?.first_name || 'Друг'}</span> <br/> Чем я
-                    могу помочь?
+                    Привет, <span className={s.user}>{user?.first_name || 'Друг'}</span> <br /> Чем
+                    я могу помочь?
                   </h1>
                 )}
               </div>
@@ -89,12 +85,10 @@ const Home = () => {
           </div>
         </div>
         <div className={s.customTextarea}>
-          <CustomTextArea/>
+          <CustomTextArea />
           <p>{activeModel}</p>
         </div>
       </div>
-
-
     </div>
   );
 };

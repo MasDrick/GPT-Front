@@ -4,7 +4,15 @@
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  height: 100%;
+  margin-top: 80px;
+
   padding: 0px 20px;
+}
+.virtuosoContainer {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px 0;
 }
 
 h3 {
@@ -16,6 +24,10 @@ code {
   background: var(--tg-theme-secondary-bg-color);
 
   padding: 0.15rem 0.3rem;
+}
+
+a {
+  color: var(--tg-theme-link-color);
 }
 
 ol,
