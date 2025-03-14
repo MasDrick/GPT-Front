@@ -1,4 +1,3 @@
-// components/ChatHistory/ChatMessage.jsx
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -9,11 +8,18 @@ import LazyImage from '../LazyImage/LazyImage';
 
 import s from './ChatHistory.module.scss';
 import { useTelegram } from '../../hooks/useTelegram';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendMessageThunk } from '../../slices/chatThunk';
+// import { urlBack } from '../../hooks/useTelegram';
 
 const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customStyle }) => {
   const { tg } = useTelegram();
+  const dispatch = useDispatch();
+  const lastUserMessage = useSelector((state) => state.chatHistory.lastUserMessage);
+  const model = useSelector((state) => state.activeModel.currentModel);
+  const activeBrain = useSelector((state) => state.chatHistory.brain);
+  const urlBack = 'https://fastapi-production-c93c.up.railway.app';
 
-  // Заменяем <think>...</think> на Markdown quotes (блоки с > 🤔 ...)
   const transformedText = message.text?.replace(/<think>([\s\S]*?)<\/think>/g, (_, content) =>
     content
       .trim()
@@ -21,6 +27,19 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
       .map((line) => `> ${line.trim()}`)
       .join('\n'),
   );
+
+  const handleRepeat = () => {
+    if (lastUserMessage && lastUserMessage.trim()) {
+      dispatch(
+        sendMessageThunk({
+          message: lastUserMessage,
+          model,
+          activeBrain,
+          urlBack,
+        }),
+      );
+    }
+  };
 
   return (
     <>
@@ -60,9 +79,14 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
 
       {message.type === 'bot' && (message.text || message.image) && (
         <div className={s.buttons}>
-          <Copy className={s.btn} size={16} onClick={() => handleCopy(message)} />
-          <RotateCw className={s.btn} size={16} />
-          <Reply className={s.btn} size={20} />
+          <Copy
+            className={s.btn}
+            size={16}
+            onClick={() => handleCopy(message)}
+            title="Скопировать"
+          />
+          <RotateCw className={s.btn} size={16} onClick={handleRepeat} title="Повторить запрос" />
+          <Reply className={s.btn} size={20} title="Ответить" />
         </div>
       )}
     </>
