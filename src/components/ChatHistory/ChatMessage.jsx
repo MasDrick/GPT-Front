@@ -13,6 +13,15 @@ import { useTelegram } from '../../hooks/useTelegram';
 const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customStyle }) => {
   const { tg } = useTelegram();
 
+  // Заменяем <think>...</think> на Markdown quotes (блоки с > 🤔 ...)
+  const transformedText = message.text?.replace(/<think>([\s\S]*?)<\/think>/g, (_, content) =>
+    content
+      .trim()
+      .split('\n')
+      .map((line) => `> ${line.trim()}`)
+      .join('\n'),
+  );
+
   return (
     <>
       <div className={`${s.messageBox} ${message.type === 'user' ? s.userMessage : s.botMessage}`}>
@@ -44,7 +53,7 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
                 );
               },
             }}>
-            {message.text}
+            {transformedText}
           </ReactMarkdown>
         )}
       </div>
