@@ -3,22 +3,20 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight, oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Copy, RotateCw, Reply, Clipboard } from 'lucide-react';
+import { Copy, RotateCw, ArrowDownToLine, Clipboard } from 'lucide-react';
 import LazyImage from '../LazyImage/LazyImage';
 
 import s from './ChatHistory.module.scss';
 import { useTelegram } from '../../hooks/useTelegram';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { addMessage } from '../../slices/chatHistorySlice';
 import { sendMessageThunk } from '../../slices/chatThunk';
-// import { urlBack } from '../../hooks/useTelegram';
+import { repeatMessageThunk } from '../../slices/repeatThunk';
 
 const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customStyle }) => {
   const { tg } = useTelegram();
   const dispatch = useDispatch();
-  const lastUserMessage = useSelector((state) => state.chatHistory.lastUserMessage);
-  const model = useSelector((state) => state.activeModel.currentModel);
-  const activeBrain = useSelector((state) => state.chatHistory.brain);
-  const urlBack = 'https://fastapi-production-c93c.up.railway.app';
 
   const transformedText = message.text?.replace(/<think>([\s\S]*?)<\/think>/g, (_, content) =>
     content
@@ -28,24 +26,28 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
       .join('\n'),
   );
 
-  const handleRepeat = () => {
-    if (lastUserMessage && lastUserMessage.trim()) {
-      dispatch(
-        sendMessageThunk({
-          message: lastUserMessage,
-          model,
-          activeBrain,
-          urlBack,
-        }),
-      );
-    }
+  const handleRepeat = (message) => {
+    // console.log(message.apiUrl, message.userPrompt, message.activeBrain);
+    dispatch(
+      repeatMessageThunk({
+        apiUrl: message.apiUrl,
+        userPrompt: message.userPrompt,
+        activeBrain: message.activeBrain,
+      }),
+    );
   };
 
   return (
     <>
       <div className={`${s.messageBox} ${message.type === 'user' ? s.userMessage : s.botMessage}`}>
         {message.image ? (
-          <LazyImage src={message.image} alt="Изображение" className={s.messageImage} />
+          <LazyImage
+            src={message.image}
+            alt="Изображение"
+            className={s.messageImage}
+            prompt={s.usedPrompt}
+            usedPrompt={message.used_prompt}
+          />
         ) : (
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
@@ -85,8 +87,13 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
             onClick={() => handleCopy(message)}
             title="Скопировать"
           />
-          <RotateCw className={s.btn} size={16} onClick={handleRepeat} title="Повторить запрос" />
-          <Reply className={s.btn} size={20} title="Ответить" />
+          <RotateCw
+            className={s.btn}
+            size={16}
+            onClick={() => handleRepeat(message)}
+            title="Повторить запрос"
+          />
+          <ArrowDownToLine className={s.btn} size={16} title="Ответить" />
         </div>
       )}
     </>

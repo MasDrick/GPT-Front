@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import ContentLoader from 'react-content-loader';
 
-const LazyImage = ({ src, alt, className }) => {
+const LazyImage = ({ src, alt, className, usedPrompt, prompt }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
   return (
-    <div style={{ position: 'relative', width: '100%', maxHeight: '400px' }}>
+    <div style={{ position: 'relative', width: '100%' }}>
       {isLoading && !hasError && <ImageSkeleton key="skeleton" />}
       {!hasError && (
         <img
@@ -30,6 +30,12 @@ const LazyImage = ({ src, alt, className }) => {
         <p style={{ color: 'var(--tg-theme-destructive-text-color)' }}>
           Ошибка загрузки изображения, попробуйте еще раз
         </p>
+      )}
+      {usedPrompt && (
+        <div className={prompt}>
+          <strong>Промпт: </strong>
+          <p>{usedPrompt}</p>
+        </div>
       )}
     </div>
   );

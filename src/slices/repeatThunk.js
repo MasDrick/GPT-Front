@@ -2,18 +2,10 @@
 import { addMessage } from './chatHistorySlice';
 import axios from 'axios';
 
-export const sendMessageThunk =
-  ({ message, model, activeBrain, urlBack }) =>
+export const repeatMessageThunk =
+  ({ apiUrl, userPrompt, activeBrain }) =>
   async (dispatch) => {
-    if (!message.trim()) return;
-
-    const apiUrl = `${urlBack}/generate/?prompt=${encodeURIComponent(
-      message,
-    )}&model=${model}&smart_prompt=${activeBrain}`;
-
-    dispatch(addMessage({ type: 'user', text: message }));
-
-    const userPrompt = message;
+    dispatch(addMessage({ type: 'user', text: userPrompt }));
 
     try {
       const response = await axios.post(apiUrl);

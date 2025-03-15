@@ -6,17 +6,14 @@ export const chatHistorySlice = createSlice({
   initialState: {
     chatHistory: [],
     brain: false,
-    lastUserMessage: '', // просто в памяти
   },
   reducers: {
     setChatHistory: (state, action) => {
       state.chatHistory = action.payload;
+      console.log(state.chatHistory);
     },
     addMessage: (state, action) => {
       state.chatHistory.push(action.payload);
-    },
-    setLastUserMessage: (state, action) => {
-      state.lastUserMessage = action.payload;
     },
     setBrain: (state, action) => {
       state.brain = action.payload;
@@ -24,6 +21,5 @@ export const chatHistorySlice = createSlice({
   },
 });
 
-export const { setChatHistory, addMessage, setLastUserMessage, setBrain } =
-  chatHistorySlice.actions;
+export const { setChatHistory, addMessage, setBrain } = chatHistorySlice.actions;
 export default chatHistorySlice.reducer;

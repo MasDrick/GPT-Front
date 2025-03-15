@@ -87,6 +87,21 @@ th {
   border-radius: 8px;
 }
 
+.usedPrompt {
+  margin-top: 10px;
+  font-size: 14px;
+  background: linear-gradient(90deg, var(--tg-theme-secondary-bg-color), var(--tg-theme-bg-color));
+  padding: 8px 12px;
+  border-radius: 10px;
+  border-top: 1px solid var(--tg-theme-button-color);
+  max-width: 400px;
+  word-break: break-word;
+
+  p {
+    font-style: italic;
+  }
+}
+
 .messageBox {
   display: inline-block;
   max-width: 80%;
@@ -119,12 +134,15 @@ ul {
 }
 .buttons {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   margin: 10px 0px 20px 5px;
 
   .btn {
     opacity: 0.6;
+    width: 20px;
+    padding: 2px;
     transition: all 0.2s ease-in-out;
+
     cursor: pointer;
 
     &:hover {
