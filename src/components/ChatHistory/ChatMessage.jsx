@@ -9,7 +9,7 @@ import LazyImage from '../LazyImage/LazyImage';
 import s from './ChatHistory.module.scss';
 import { useTelegram } from '../../hooks/useTelegram';
 import { useDispatch } from 'react-redux';
-import { repeatMessageThunk } from '../../slices/repeatThunk';
+import { repeatMessageThunk } from '../../slices/chatThunk';
 
 const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customStyle }) => {
   const { tg } = useTelegram();
