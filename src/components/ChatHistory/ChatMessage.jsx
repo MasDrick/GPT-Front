@@ -8,16 +8,15 @@ import LazyImage from '../LazyImage/LazyImage';
 
 import s from './ChatHistory.module.scss';
 import { useTelegram } from '../../hooks/useTelegram';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { addMessage } from '../../slices/chatHistorySlice';
-import { sendMessageThunk } from '../../slices/chatThunk';
+import { useDispatch } from 'react-redux';
 import { repeatMessageThunk } from '../../slices/repeatThunk';
+import { addMessage } from '../../slices/chatHistorySlice';
 
 const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customStyle }) => {
   const { tg } = useTelegram();
   const dispatch = useDispatch();
 
+  // Преобразование <think> в цитаты Markdown
   const transformedText = message.text?.replace(/<think>([\s\S]*?)<\/think>/g, (_, content) =>
     content
       .trim()
@@ -27,7 +26,6 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
   );
 
   const handleRepeat = (message) => {
-    // console.log(message.apiUrl, message.userPrompt, message.activeBrain);
     dispatch(
       repeatMessageThunk({
         apiUrl: message.apiUrl,
@@ -35,6 +33,26 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
         activeBrain: message.activeBrain,
       }),
     );
+  };
+
+  // ✅ Функция для скачивания изображения
+  const handleDownloadImage = async (url, filename = 'image.jpg') => {
+    try {
+      const response = await fetch(url, { mode: 'cors' });
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Ошибка при скачивании изображения:', error);
+    }
   };
 
   return (
@@ -81,19 +99,28 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
 
       {message.type === 'bot' && (message.text || message.image) && (
         <div className={s.buttons}>
-          <Copy
-            className={s.btn}
-            size={16}
-            onClick={() => handleCopy(message)}
-            title="Скопировать"
-          />
+          {message.image ? (
+            <ArrowDownToLine
+              className={s.btn}
+              size={16}
+              title="Скачать"
+              onClick={() => handleDownloadImage(message.image, `image-${Date.now()}.jpg`)}
+            />
+          ) : (
+            <Copy
+              className={s.btn}
+              size={16}
+              onClick={() => handleCopy(message)}
+              title="Скопировать"
+            />
+          )}
+
           <RotateCw
             className={s.btn}
             size={16}
             onClick={() => handleRepeat(message)}
             title="Повторить запрос"
           />
-          <ArrowDownToLine className={s.btn} size={16} title="Ответить" />
         </div>
       )}
     </>
