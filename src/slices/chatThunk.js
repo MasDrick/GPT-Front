@@ -1,5 +1,4 @@
-// slices/chatThunk.js
-import { addMessage } from './chatHistorySlice';
+import { addMessage, setLoading } from './chatHistorySlice';
 import axios from 'axios';
 
 export const sendMessageThunk =
@@ -12,8 +11,7 @@ export const sendMessageThunk =
     )}&model=${model}&smart_prompt=${activeBrain}`;
 
     dispatch(addMessage({ type: 'user', text: message }));
-
-    const userPrompt = message;
+    dispatch(setLoading(true)); // 👉 Показываем загрузку
 
     try {
       const response = await axios.post(apiUrl);
@@ -23,8 +21,6 @@ export const sendMessageThunk =
         used_prompt: used_prompt,
       } = response.data;
 
-      // console.log(response.data);
-
       dispatch(
         addMessage({
           type: 'bot',
@@ -33,7 +29,7 @@ export const sendMessageThunk =
           apiUrl: apiUrl || '',
           activeBrain: activeBrain || '',
           used_prompt: used_prompt || '',
-          userPrompt: userPrompt || '',
+          userPrompt: message || '',
         }),
       );
     } catch (error) {
@@ -44,5 +40,7 @@ export const sendMessageThunk =
           text: 'Произошла ошибка. Пожалуйста, попробуйте позже.',
         }),
       );
+    } finally {
+      dispatch(setLoading(false)); // 👉 Снимаем флаг загрузки
     }
   };

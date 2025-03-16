@@ -10,7 +10,6 @@ import s from './ChatHistory.module.scss';
 import { useTelegram } from '../../hooks/useTelegram';
 import { useDispatch } from 'react-redux';
 import { repeatMessageThunk } from '../../slices/repeatThunk';
-import { addMessage } from '../../slices/chatHistorySlice';
 
 const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customStyle }) => {
   const { tg } = useTelegram();
@@ -99,21 +98,12 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
 
       {message.type === 'bot' && (message.text || message.image) && (
         <div className={s.buttons}>
-          {message.image ? (
-            <ArrowDownToLine
-              className={s.btn}
-              size={16}
-              title="Скачать"
-              onClick={() => handleDownloadImage(message.image, `image-${Date.now()}.jpg`)}
-            />
-          ) : (
-            <Copy
-              className={s.btn}
-              size={16}
-              onClick={() => handleCopy(message)}
-              title="Скопировать"
-            />
-          )}
+          <Copy
+            className={s.btn}
+            size={16}
+            onClick={() => handleCopy(message)}
+            title="Скопировать"
+          />
 
           <RotateCw
             className={s.btn}
@@ -121,6 +111,14 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
             onClick={() => handleRepeat(message)}
             title="Повторить запрос"
           />
+          {message.image && (
+            <ArrowDownToLine
+              className={s.btn}
+              size={16}
+              title="Скачать"
+              onClick={() => handleDownloadImage(message.image, `image-${Date.now()}.jpg`)}
+            />
+          )}
         </div>
       )}
     </>

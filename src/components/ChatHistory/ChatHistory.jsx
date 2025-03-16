@@ -11,6 +11,8 @@ const ChatHistory = () => {
   const [alert, setAlert] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const chatHistory = useSelector((state) => state.chatHistory.chatHistory);
+  const loading = useSelector((state) => state.chatHistory.loading);
+  const activeModel = useSelector((state) => state.activeModel.currentModel);
 
   useEffect(() => {
     if (chatHistory.length > 0) {
@@ -69,6 +71,18 @@ const ChatHistory = () => {
   return (
     <div className={s.chatHistory}>
       {renderedMessages}
+      {loading && (
+        <div className={`${s.messageBox} ${s.botMessage}`}>
+          <div className={s.typingIndicator}>
+            {activeModel} печатает
+            <span className={s.dots}>
+              <span>.</span>
+              <span>.</span>
+              <span>.</span>
+            </span>
+          </div>
+        </div>
+      )}
 
       {alert !== null && (
         <div className={`${s.alert} ${isVisible ? s.visible : ''}`}>

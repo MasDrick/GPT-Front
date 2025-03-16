@@ -6,6 +6,7 @@ export const chatHistorySlice = createSlice({
   initialState: {
     chatHistory: [],
     brain: false,
+    loading: false,
   },
   reducers: {
     setChatHistory: (state, action) => {
@@ -15,11 +16,14 @@ export const chatHistorySlice = createSlice({
     addMessage: (state, action) => {
       state.chatHistory.push(action.payload);
     },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
     setBrain: (state, action) => {
       state.brain = action.payload;
     },
   },
 });
 
-export const { setChatHistory, addMessage, setBrain } = chatHistorySlice.actions;
+export const { setChatHistory, addMessage, setLoading, setBrain } = chatHistorySlice.actions;
 export default chatHistorySlice.reducer;
