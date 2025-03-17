@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -88,6 +88,19 @@ const ChatMessage = React.memo(({ message, handleCopy, handleCopyCode, customSty
                   </div>
                 ) : (
                   <code className={className}>{children}</code>
+                );
+              },
+              blockquote({ node, children }) {
+                const [isExpanded, setIsExpanded] = useState(false);
+
+                const handleClick = () => setIsExpanded(true);
+
+                return (
+                  <blockquote
+                    className={`${s.blockquote} ${isExpanded ? s.expanded : ''}`}
+                    onClick={handleClick}>
+                    {children}
+                  </blockquote>
                 );
               },
             }}>

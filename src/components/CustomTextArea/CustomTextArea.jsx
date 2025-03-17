@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { useTelegram } from '../../hooks/useTelegram';
-import { Paperclip, ArrowUp, Brain } from 'lucide-react';
+import { Paperclip, ArrowUp, Brain, Ban } from 'lucide-react';
 import styles from './CustomTextArea.module.scss';
 import useTelegramViewportHack from '../../hooks/useTelegramViewportHack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +19,8 @@ const CustomTextArea = () => {
   const dispatch = useDispatch();
 
   const model = useSelector((state) => state.activeModel.currentModel);
+  const isLoading = useSelector((state) => state.chatHistory.loading);
+
   const { isKeyboardOpen, keyboardHeight } = useTelegramViewportHack(textareaRef);
 
   useEffect(() => {
@@ -31,19 +33,21 @@ const CustomTextArea = () => {
   const handleSubmit = () => {
     if (message.trim() === '') return;
 
-    dispatch(
-      sendMessageThunk({
-        message,
-        model,
-        activeBrain,
-        urlBack,
-      }),
-    );
-    dispatch(setBrain(activeBrain));
+    if (isLoading === false) {
+      dispatch(
+        sendMessageThunk({
+          message,
+          model,
+          activeBrain,
+          urlBack,
+        }),
+      );
+      dispatch(setBrain(activeBrain));
 
-    setMessage('');
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
+      setMessage('');
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
     }
   };
 
@@ -94,13 +98,23 @@ const CustomTextArea = () => {
           </button>
         )}
 
-        <button
-          className={`${message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`} ${
-            tg.themeParams?.bg_color === '#ffffff' ? styles.isLight : ''
-          }`}
-          onClick={handleSubmit}>
-          <ArrowUp color={'#ffffff'} size={18} />
-        </button>
+        {isLoading ? (
+          <button
+            className={`${message === '' ? styles.btn : `${styles.btn} `} ${
+              tg.themeParams?.bg_color === '#ffffff' ? styles.isLight : ''
+            }`}
+            onClick={handleSubmit}>
+            <Ban size={18} />
+          </button>
+        ) : (
+          <button
+            className={`${message === '' ? styles.btn : `${styles.btn} ${styles.activeBtn}`} ${
+              tg.themeParams?.bg_color === '#ffffff' ? styles.isLight : ''
+            }`}
+            onClick={handleSubmit}>
+            <ArrowUp color={'#ffffff'} size={18} />
+          </button>
+        )}
       </div>
     </div>
   );
